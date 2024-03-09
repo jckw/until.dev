@@ -2,11 +2,13 @@ import { stripe } from "@/lib/stripe"
 import { getOrCreateBounty } from "@/server/utils/getOrCreateBounty"
 import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
+import { db, schema } from "@/db"
+import { Duration, add } from "date-fns"
 
 const dataSchema = z.object({
   org: z.string(),
   repo: z.string(),
-  id: z.number(),
+  issue: z.number(),
   amount: z.number(),
   expiresIn: z.enum([
     "one_week",
@@ -17,12 +19,27 @@ const dataSchema = z.object({
   ]),
 })
 
-const EXPIRY_MAP = {
-  one_week: "1 week",
-  one_month: "1 month",
-  three_months: "3 months",
-  six_months: "6 months",
-  never: "never",
+const EXPIRY_MAP: Record<string, { text: string; add: Duration | null }> = {
+  one_week: {
+    text: "1 week",
+    add: { weeks: 1 },
+  },
+  one_month: {
+    text: "1 month",
+    add: { months: 1 },
+  },
+  three_months: {
+    text: "3 months",
+    add: { months: 3 },
+  },
+  six_months: {
+    text: "6 months",
+    add: { months: 6 },
+  },
+  never: {
+    text: "never",
+    add: null,
+  },
 }
 
 export default async function handler(
@@ -41,17 +58,17 @@ export default async function handler(
     return
   }
 
-  const dbProduct = await getOrCreateBounty(parsed.data)
+  const centAmount = parsed.data.amount * 100
+  const dbBountyProduct = await getOrCreateBounty(parsed.data)
 
   try {
-    // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
           price_data: {
             currency: "usd",
-            product: dbProduct.stripeProductId,
-            unit_amount: parsed.data.amount * 100,
+            product: dbBountyProduct.stripeProductId,
+            unit_amount: centAmount,
           },
           quantity: 1,
         },
@@ -63,13 +80,24 @@ export default async function handler(
             parsed.data.expiresIn === "never"
               ? "Your donation will only be refunded if the repo owner cancels the bounty."
               : `If this issue isn't resolved in the next ${
-                  EXPIRY_MAP[parsed.data.expiresIn]
+                  EXPIRY_MAP[parsed.data.expiresIn]["text"]
                 }, the funds will be returned to you.`,
         },
       },
-      success_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.id}?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.id}?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.issue}?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.issue}?canceled=true`,
     })
+
+    db.insert(schema.checkoutSession).values({
+      bountyIssueId: dbBountyProduct.id,
+      stripeCheckoutSessionId: session.id,
+      amount: centAmount,
+      expiresAt: EXPIRY_MAP[parsed.data.expiresIn]["add"]
+        ? add(new Date(), EXPIRY_MAP[parsed.data.expiresIn]["add"]!)
+        : null,
+      status: session.status || "open",
+    })
+
     res.redirect(303, session.url as string)
   } catch (err: any) {
     res.status(err.statusCode || 500).json(err.message)

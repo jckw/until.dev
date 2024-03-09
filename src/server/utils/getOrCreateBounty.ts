@@ -6,7 +6,7 @@ import { and, eq } from "drizzle-orm"
 type BountyData = {
   org: string
   repo: string
-  id: number
+  issue: number
 }
 
 export const getOrCreateBounty = async (bountyData: BountyData) => {
@@ -17,22 +17,22 @@ export const getOrCreateBounty = async (bountyData: BountyData) => {
       and(
         eq(schema.bountyIssue.org, bountyData.org),
         eq(schema.bountyIssue.repo, bountyData.repo),
-        eq(schema.bountyIssue.issue, bountyData.id)
+        eq(schema.bountyIssue.issue, bountyData.issue)
       )
     )
     .then(takeUniqueOrNull)
 
   if (!dbProduct) {
     const stripeProduct = await stripe.products.create({
-      name: `Bounty contribution for ${bountyData.org}/${bountyData.repo}#${bountyData.id}`,
-      description: `A donation to the bounty for the issue at github.com/${bountyData.org}/${bountyData.repo}/issues/${bountyData.id}`,
+      name: `Bounty contribution for ${bountyData.org}/${bountyData.repo}#${bountyData.issue}`,
+      description: `A donation to the bounty for the issue at github.com/${bountyData.org}/${bountyData.repo}/issues/${bountyData.issue}`,
     })
     dbProduct = await db
       .insert(schema.bountyIssue)
       .values({
         org: bountyData.org,
         repo: bountyData.repo,
-        issue: bountyData.id,
+        issue: bountyData.issue,
         stripeProductId: stripeProduct.id,
       })
       .returning()

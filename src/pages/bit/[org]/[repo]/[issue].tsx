@@ -11,25 +11,25 @@ const stripePromise = loadStripe(
 
 export default function Page() {
   const router = useRouter()
-  const { org, repo, id } = router.query
+  const { org, repo, issue } = router.query
 
   const [resp, setResp] = useState<
     Awaited<ReturnType<typeof octokit.issues.get>>["data"] | null
   >(null)
 
   useEffect(() => {
-    if (!org || !repo || !id) return
+    if (!org || !repo || !issue) return
 
     octokit.issues
       .get({
         owner: org as string,
         repo: repo as string,
-        issue_number: Number(id),
+        issue_number: Number(issue),
       })
       .then((response) => {
         setResp(response.data)
       })
-  }, [org, repo, id])
+  }, [org, repo, issue])
 
   return (
     <main
@@ -39,7 +39,7 @@ export default function Page() {
         <form action="/api/checkout" method="POST">
           <input type="hidden" name="org" value={org} />
           <input type="hidden" name="repo" value={repo} />
-          <input type="hidden" name="id" value={id} />
+          <input type="hidden" name="issue" value={issue} />
           <h1 className="text-4xl font-bold">{resp.title}</h1>
           <p>Contribute to the bounty</p>
           <div className="flex gap-4 items-center">
