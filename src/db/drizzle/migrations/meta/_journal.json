@@ -8,6 +8,20 @@
       "when": 1710026037148,
       "tag": "0000_cloudy_blackheart",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710027163335,
+      "tag": "0001_typical_excalibur",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710027205761,
+      "tag": "0002_next_captain_universe",
+      "breakpoints": true
     }
   ]
 }

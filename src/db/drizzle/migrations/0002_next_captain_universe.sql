@@ -1,0 +1,1 @@
+ALTER TABLE "bounty_issue" ALTER COLUMN "bounty_status" SET DEFAULT 'open';
