@@ -14,8 +14,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## MVP-ready
 
-- [ ] Set up DB
-- [ ] Record all Stripe products in DB, mapping to org/repo/issue composite key
+- [x] Set up DB
+- [x] Record all Stripe products in DB, mapping to org/repo/issue composite key
 - [ ] Set up auto-return functionality
   - [ ] Record payment intent in DB with metadata
   - [ ] Set up webhook to listen for successful payment

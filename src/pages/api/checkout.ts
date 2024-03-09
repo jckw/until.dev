@@ -1,15 +1,12 @@
+import { stripe } from "@/lib/stripe"
+import { getOrCreateBounty } from "@/server/utils/getOrCreateBounty"
 import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 
-import Stripe from "stripe"
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2023-10-16",
-})
-
-const schema = z.object({
+const dataSchema = z.object({
   org: z.string(),
   repo: z.string(),
-  id: z.string(),
+  id: z.number(),
   amount: z.number(),
   expiresIn: z.enum([
     "one_week",
@@ -32,9 +29,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const data = req.body
+  const parsed = dataSchema.safeParse(req.body)
 
-  if (!schema.safeParse(data)) {
+  if (!parsed.success) {
     res.status(400).json("Invalid input")
     return
   }
@@ -44,21 +41,7 @@ export default async function handler(
     return
   }
 
-  // TODO: Get or create product from DB
-  // product = await stripe.products.search({
-  //   query: ``
-  //   name: `Bounty contribution for ${data.org}/${data.repo}#${data.id}`,
-  // })
-
-  // if (product.data.length === 0) {
-  // const product = await stripe.products.create({
-  //   name: `Bounty contribution for ${data.org}/${data.repo}#${data.id}`,
-  //   description: `A donation to the bounty for the issue at [github.com/${data.org}/${data.repo}/issues/${data.id}](https://github.com/${data.org}/${data.repo}/issues/${data.id})`,
-  // })
-  const product = {
-    id: "prod_PhxSgwtyblb10T",
-  }
-  // }
+  const dbProduct = await getOrCreateBounty(parsed.data)
 
   try {
     // Create Checkout Sessions from body params.
@@ -67,8 +50,8 @@ export default async function handler(
         {
           price_data: {
             currency: "usd",
-            product: product.id,
-            unit_amount: data.amount * 100,
+            product: dbProduct.stripeProductId,
+            unit_amount: parsed.data.amount * 100,
           },
           quantity: 1,
         },
@@ -77,15 +60,15 @@ export default async function handler(
       custom_text: {
         submit: {
           message:
-            data.expiresIn === "never"
+            parsed.data.expiresIn === "never"
               ? "Your donation will only be refunded if the repo owner cancels the bounty."
               : `If this issue isn't resolved in the next ${
-                  EXPIRY_MAP[data.expiresIn as keyof typeof EXPIRY_MAP]
+                  EXPIRY_MAP[parsed.data.expiresIn]
                 }, the funds will be returned to you.`,
         },
       },
-      success_url: `${process.env.NEXT_PUBLIC_URL}/bit/${data.org}/${data.repo}/${data.id}?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}/bit/${data.org}/${data.repo}/${data.id}?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.id}?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.id}?canceled=true`,
     })
     res.redirect(303, session.url as string)
   } catch (err: any) {
