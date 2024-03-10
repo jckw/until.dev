@@ -12,6 +12,7 @@ const dataSchema = z.object({
   amount: z.coerce.number(),
   expiresIn: z.enum([
     "one_week",
+    "two_weeks",
     "one_month",
     "three_months",
     "six_months",
@@ -23,6 +24,10 @@ const EXPIRY_MAP: Record<string, { text: string; add: Duration | null }> = {
   one_week: {
     text: "1 week",
     add: { weeks: 1 },
+  },
+  two_weeks: {
+    text: "2 weeks",
+    add: { weeks: 2 },
   },
   one_month: {
     text: "1 month",
