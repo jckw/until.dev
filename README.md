@@ -28,6 +28,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Add warning about low-value payments (e.g. $1 payments will get eaten by fees)
 - [ ] Add a page for repo owners to claim bounties
 - [ ] **Add a cron job to check for closed issues and automatically pause bounties**
+- [ ] Integrate a bot that auto comments on issues when bounties are created
+- [ ] Have the bot auto-update the bounty amount in the issue comment when it changes
+- [ ] Success UI for when a payment goes through (Sonner?)
+- [ ] Error UI for when a payment fails (Sonner?)
+- [ ] Figure out why Shadcn is being painful
 - [ ] Write terms and conditions
 
 ### Future Features
@@ -36,3 +41,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Multi-currency support for global contributions
 - [ ] User profiles for tracking contributions and refunds
 - [ ] Social sharing options to promote bounties
+- [ ] Automated bounty release approval based on paying donor approval
