@@ -8,6 +8,7 @@ import { trpc } from "@/utils/trpc"
 import {
   addDays,
   differenceInCalendarDays,
+  format,
   isAfter,
   isBefore,
   startOfDay,
@@ -77,13 +78,19 @@ const DonationChart: React.FC<DonationChartProps> = ({ donations }) => {
   return (
     <ResponsiveContainer width="100%" height={400}>
       <AreaChart data={chartData}>
-        <XAxis dataKey="date" />
+        <XAxis
+          dataKey="date"
+          tickFormatter={(date: Date) => format(date, "MMM d")}
+        />
         <YAxis tickFormatter={(value) => `$${(value / 100).toFixed(2)}`} />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip
+          labelFormatter={(date: Date) =>
+            `Solved by: ${format(date, "d MMMM yyyy")}`
+          }
           formatter={(value: number) => [
             `$${(value / 100).toFixed(2)}`,
-            "Amount",
+            "Bounty awarded",
           ]}
         />
         <Area
