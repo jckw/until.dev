@@ -19,15 +19,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Set up auto-return functionality
   - [x] Record checkout session in DB with metadata
   - [x] Set up webhook to listen for successful payment
-  - [ ] Create cron job to check for expired bounties and automate returns
+  - [ ] **Create cron job to check for expired bounties and automate returns**
   - [ ] Write some tests
 - [ ] Add a way to "pause refunds" (e.g. when a claim has been made, but not yet verified)
 - [ ] Style everything to look more legit
-- [ ] Show the total bounty on an issue
-- [ ] Create a payment graph showing the payout over time for each issue
+- [x] Show the total bounty on an issue
+- [x] Create a payment graph showing the payout over time for each issue
 - [ ] Add warning about low-value payments (e.g. $1 payments will get eaten by fees)
 - [ ] Add a page for repo owners to claim bounties
-- [ ] Add a cron job to check for closed issues and automatically pause bounties
+- [ ] **Add a cron job to check for closed issues and automatically pause bounties**
+- [ ] Write terms and conditions
 
 ### Future Features
 
