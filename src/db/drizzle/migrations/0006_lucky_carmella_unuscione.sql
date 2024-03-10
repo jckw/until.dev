@@ -1,0 +1,1 @@
+ALTER TABLE "checkout_session" ADD CONSTRAINT "checkout_session_stripe_checkout_session_id_unique" UNIQUE("stripe_checkout_session_id");

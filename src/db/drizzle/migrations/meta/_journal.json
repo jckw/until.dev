@@ -29,6 +29,27 @@
       "when": 1710028581835,
       "tag": "0003_rare_dreadnoughts",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1710029634944,
+      "tag": "0004_classy_solo",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1710029933505,
+      "tag": "0005_shocking_union_jack",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1710030006880,
+      "tag": "0006_lucky_carmella_unuscione",
+      "breakpoints": true
     }
   ]
 }

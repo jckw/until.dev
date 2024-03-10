@@ -8,8 +8,8 @@ import { Duration, add } from "date-fns"
 const dataSchema = z.object({
   org: z.string(),
   repo: z.string(),
-  issue: z.number(),
-  amount: z.number(),
+  issue: z.coerce.number(),
+  amount: z.coerce.number(),
   expiresIn: z.enum([
     "one_week",
     "one_month",
@@ -49,7 +49,7 @@ export default async function handler(
   const parsed = dataSchema.safeParse(req.body)
 
   if (!parsed.success) {
-    res.status(400).json("Invalid input")
+    res.status(400).json(parsed.error)
     return
   }
 
@@ -88,15 +88,29 @@ export default async function handler(
       cancel_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.issue}?canceled=true`,
     })
 
-    db.insert(schema.checkoutSession).values({
-      bountyIssueId: dbBountyProduct.id,
-      stripeCheckoutSessionId: session.id,
-      amount: centAmount,
-      expiresAt: EXPIRY_MAP[parsed.data.expiresIn]["add"]
-        ? add(new Date(), EXPIRY_MAP[parsed.data.expiresIn]["add"]!)
-        : null,
-      status: session.status || "open",
-    })
+    const expiresAt = EXPIRY_MAP[parsed.data.expiresIn]["add"]
+      ? add(new Date(), EXPIRY_MAP[parsed.data.expiresIn]["add"]!)
+      : null
+
+    await db
+      .insert(schema.checkoutSession)
+      .values({
+        status: session.status || "open",
+        stripeCheckoutSessionId: session.id,
+
+        bountyIssueId: dbBountyProduct.id,
+        amount: centAmount,
+        expiresAt: expiresAt,
+      })
+      .onConflictDoUpdate({
+        // Assume the webhook has beaten us to the punch, so don't overwrite the status
+        target: schema.checkoutSession.stripeCheckoutSessionId,
+        set: {
+          bountyIssueId: dbBountyProduct.id,
+          amount: centAmount,
+          expiresAt: expiresAt,
+        },
+      })
 
     res.redirect(303, session.url as string)
   } catch (err: any) {

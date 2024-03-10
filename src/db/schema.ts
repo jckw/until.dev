@@ -43,18 +43,20 @@ export const checkoutSessionStatusEnum = pgEnum(
   checkoutSessionStatusList
 )
 
-export const checkoutSession = pgTable("checkoutSession", {
+export const checkoutSession = pgTable("checkout_session", {
   id: serial("id").primaryKey().notNull(),
-  bountyIssueId: integer("bounty_issue_id")
-    .notNull()
-    .references(() => bountyIssue.id),
   stripeCheckoutSessionId: varchar("stripe_checkout_session_id", {
     length: 255,
-  }).notNull(),
-  amount: integer("amount").notNull(), // in cents
-  expiresAt: timestamp("expires_at"),
+  })
+    .notNull()
+    .unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   status: checkoutSessionStatusEnum("status").notNull(),
+
+  // May be null if the webhook is faster than the insert
+  expiresAt: timestamp("expires_at"),
+  bountyIssueId: integer("bounty_issue_id").references(() => bountyIssue.id),
+  amount: integer("amount"), // in cents
 })
 
 export const bountyIssueRelations = relations(bountyIssue, ({ many }) => ({

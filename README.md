@@ -17,7 +17,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] Set up DB
 - [x] Record all Stripe products in DB, mapping to org/repo/issue composite key
 - [ ] Set up auto-return functionality
-  - [ ] Record payment intent in DB with metadata
+  - [x] Record checkout session in DB with metadata
   - [ ] Set up webhook to listen for successful payment
   - [ ] Create cron job to check for expired bounties and automate returns
   - [ ] Write some tests
