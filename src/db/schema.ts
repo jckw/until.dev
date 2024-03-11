@@ -43,6 +43,7 @@ export const checkoutSessionStatusEnum = pgEnum(
   checkoutSessionStatusList
 )
 
+// TODO: Rename as payment note
 export const checkoutSession = pgTable("checkout_session", {
   id: serial("id").primaryKey().notNull(),
   stripeCheckoutSessionId: varchar("stripe_checkout_session_id", {
@@ -50,6 +51,9 @@ export const checkoutSession = pgTable("checkout_session", {
   })
     .notNull()
     .unique(),
+  stripePaymentIntentId: varchar("payment_intent_id", { length: 255 })
+    .unique()
+    .notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   status: checkoutSessionStatusEnum("status").notNull(),
 

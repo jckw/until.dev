@@ -40,12 +40,12 @@ const stripeWebhookHandler = async (
   switch (event.type) {
     case "checkout.session.completed":
       const stripeSession = event.data.object as Stripe.Checkout.Session
-      console.log(JSON.stringify(stripeSession, null, 2))
 
       await db
         .insert(schema.checkoutSession)
         .values({
           stripeCheckoutSessionId: stripeSession.id,
+          stripePaymentIntentId: stripeSession.payment_intent as string,
           status: stripeSession.status || "complete",
         })
         .onConflictDoUpdate({
@@ -54,6 +54,12 @@ const stripeWebhookHandler = async (
             status: stripeSession.status || "complete",
           },
         })
+
+      break
+    case "refund.created":
+      const stripeRefund = event.data.object as Stripe.Refund
+      // Do we need to store this? Given that refunds should happen automatically when
+      // the expiry date is reached, we might not need to store this.
 
       break
     default:
