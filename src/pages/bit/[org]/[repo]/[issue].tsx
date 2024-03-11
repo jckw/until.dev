@@ -73,17 +73,31 @@ const DonationChart: React.FC<DonationChartProps> = ({ donations }) => {
     [JSON.stringify(donations), startDate, endDate]
   )
 
-  console.log(chartData)
-
   return (
     <ResponsiveContainer width="100%" height={400}>
       <AreaChart data={chartData}>
+        <defs>
+          <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#39D353" stopOpacity={0.8} />
+            <stop offset="75%" stopColor="#39D353" stopOpacity={0.05} />
+          </linearGradient>
+        </defs>
         <XAxis
           dataKey="date"
+          style={{ fontFamily: "monospace", fontSize: "12px" }}
           tickFormatter={(date: Date) => format(date, "MMM d")}
+          axisLine={false}
+          tickMargin={10}
+          minTickGap={15}
         />
-        <YAxis tickFormatter={(value) => `$${(value / 100).toFixed(2)}`} />
-        <CartesianGrid strokeDasharray="3 3" />
+        <YAxis
+          style={{ fontFamily: "monospace", fontSize: "12px" }}
+          tickFormatter={(value) => `$${value / 100}`}
+          axisLine={false}
+          tickLine={false}
+          tickMargin={5}
+        />
+        <CartesianGrid vertical={false} horizontal={false} />
         <Tooltip
           labelFormatter={(date: Date) =>
             `Solved by: ${format(date, "d MMMM yyyy")}`
@@ -96,8 +110,9 @@ const DonationChart: React.FC<DonationChartProps> = ({ donations }) => {
         <Area
           type="monotone"
           dataKey="amount"
-          stroke="#8884d8"
-          fill="#8884d8"
+          stroke="#016D32"
+          fill="url(#colorUv)"
+          strokeWidth={2}
         />
       </AreaChart>
     </ResponsiveContainer>
