@@ -21,6 +21,16 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectTrigger,
+  SelectValue,
+} from "@/ui/select"
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -231,22 +241,32 @@ export default function Page() {
               <input type="hidden" name="repo" value={repo} />
               <input type="hidden" name="issue" value={issue} />
               <div className="flex gap-4 items-center">
+                <div className="whitespace-nowrap">I will donate</div>
                 $
                 <Input
                   type="number"
-                  className="w-[160px]"
+                  className="w-[60px]"
                   placeholder="0"
                   name="amount"
                 />
-                <div>Expires in</div>
-                <select name="expiresIn">
-                  <option value="one_week">1 week</option>
-                  <option value="two_weeks">2 weeks</option>
-                  <option value="one_month">1 month</option>
-                  <option value="three_months">3 months</option>
-                  <option value="six_months">6 months</option>
-                  <option value="never">Never</option>
-                </select>
+                <div className="whitespace-nowrap">if solved in</div>
+                <Select name="expiresIn">
+                  <SelectTrigger aria-label="Expires in">
+                    <SelectValue placeholder="Select expiry" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectScrollUpButton />
+                    <SelectGroup>
+                      <SelectItem value="one_week">1 week</SelectItem>
+                      <SelectItem value="two_weeks">2 weeks</SelectItem>
+                      <SelectItem value="one_month">1 month</SelectItem>
+                      <SelectItem value="three_months">3 months</SelectItem>
+                      <SelectItem value="six_months">6 months</SelectItem>
+                      <SelectItem value="never">Never</SelectItem>
+                    </SelectGroup>
+                    <SelectScrollDownButton />
+                  </SelectContent>
+                </Select>
                 <Button type="submit">Contribute</Button>
               </div>
             </form>
