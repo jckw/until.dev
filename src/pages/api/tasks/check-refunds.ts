@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { db, schema } from "@/db"
-import { and, eq, gt, lt } from "drizzle-orm"
-import { Duration, add, sub } from "date-fns"
+import { and, eq, lt } from "drizzle-orm"
+import { Duration, add } from "date-fns"
 import { stripe } from "@/lib/stripe"
+import chunk from "lodash/chunk"
 
 const GRACE_PERIOD: Duration = { hours: 4 }
 
@@ -25,15 +26,17 @@ const checkRefundsTask = async (req: NextApiRequest, res: NextApiResponse) => {
       )
     )
 
-  // TODO: Add batching
+  const paymentBatches = chunk(paymentsToRefund, 10)
 
-  await Promise.all(
-    paymentsToRefund.map((payment) => {
-      return stripe.refunds.create({
-        payment_intent: payment.paymentIntentId,
+  for (const batch of paymentBatches) {
+    await Promise.all(
+      batch.map((payment) => {
+        return stripe.refunds.create({
+          payment_intent: payment.paymentIntentId,
+        })
       })
-    })
-  )
+    )
+  }
 
   res.status(200).json({ ok: true, refunded: paymentsToRefund.length })
 }
