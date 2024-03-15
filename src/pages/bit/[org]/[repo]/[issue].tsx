@@ -216,15 +216,28 @@ export default function Page() {
           </svg>
         </div>
 
+        <Input className="max-w-96 text-center" defaultValue={resp?.html_url} />
         <a
-          className=""
           href={resp?.html_url}
           target="_blank"
           rel="noopener noreferrer"
+          className="ml-2 flex h-9 items-center justify-center rounded-md border border-input bg-transparent p-1 shadow-sm transition-colors   focus-visible:ring-1 focus-visible:ring-ring aspect-square hover:bg-gray-100 hover:cursor-pointer"
         >
-          <div className="min-w-72 border px-3 py-2 rounded">
-            {resp?.html_url}
-          </div>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21 9L21 3M21 3H15M21 3L13 11M10 5H7.8C6.11984 5 5.27976 5 4.63803 5.32698C4.07354 5.6146 3.6146 6.07354 3.32698 6.63803C3 7.27976 3 8.11984 3 9.8V16.2C3 17.8802 3 18.7202 3.32698 19.362C3.6146 19.9265 4.07354 20.3854 4.63803 20.673C5.27976 21 6.11984 21 7.8 21H14.2C15.8802 21 16.7202 21 17.362 20.673C17.9265 20.3854 18.3854 19.9265 18.673 19.362C19 18.7202 19 17.8802 19 16.2V14"
+              stroke="black"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </a>
       </header>
 
