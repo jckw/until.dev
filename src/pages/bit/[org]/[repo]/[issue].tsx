@@ -179,6 +179,9 @@ export default function Page() {
     }
   )
 
+  const [inputAmount, setInputAmount] = useState("10")
+  const [inputExpiresIn, setInputExpiresIn] = useState("one_month")
+
   return (
     <div className="container mx-auto p-6">
       <header className="flex items-center justify-center relative">
@@ -226,7 +229,7 @@ export default function Page() {
       </header>
 
       {resp ? (
-        <main className="mt-8 grid grid-cols-2 gap-4">
+        <main className="mt-8 grid grid-cols-2 gap-8">
           <div>
             <div className="flex gap-3 items-start flex-col">
               <h1 className="text-2xl font-medium">
@@ -248,7 +251,69 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="mt-8">
+            <div className="border mt-8 p-4 gap-3 flex flex-col">
+              <div>I’ll contribute a total of</div>
+              <form
+                action="/api/checkout"
+                method="POST"
+                className="gap-3 flex flex-col"
+              >
+                <input type="hidden" name="org" value={org} />
+                <input type="hidden" name="repo" value={repo} />
+                <input type="hidden" name="issue" value={issue} />
+                <div className="flex gap-4 items-center">
+                  $
+                  <Input
+                    defaultValue={inputAmount}
+                    onChange={(e) => setInputAmount(e.target.value)}
+                    type="number"
+                    className="w-[60px]"
+                    placeholder="0"
+                    name="amount"
+                  />
+                  <div className="whitespace-nowrap">if solved in</div>
+                  <Select
+                    name="expiresIn"
+                    defaultValue={inputExpiresIn}
+                    onValueChange={setInputExpiresIn}
+                  >
+                    <SelectTrigger aria-label="Expires in">
+                      <SelectValue placeholder="Select expiry" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectScrollUpButton />
+                      <SelectGroup>
+                        <SelectItem value="one_week">1 week</SelectItem>
+                        <SelectItem value="two_weeks">2 weeks</SelectItem>
+                        <SelectItem value="one_month">1 month</SelectItem>
+                        <SelectItem value="three_months">3 months</SelectItem>
+                        <SelectItem value="six_months">6 months</SelectItem>
+                        <SelectItem value="never">Never</SelectItem>
+                      </SelectGroup>
+                      <SelectScrollDownButton />
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button type="submit">
+                  Contribute ${inputAmount} auto-refunding in{" "}
+                  {inputExpiresIn === "one_week"
+                    ? "1 week"
+                    : inputExpiresIn === "two_weeks"
+                    ? "2 weeks"
+                    : inputExpiresIn === "one_month"
+                    ? "1 month"
+                    : inputExpiresIn === "three_months"
+                    ? "3 months"
+                    : inputExpiresIn === "six_months"
+                    ? "6 months"
+                    : "never"}
+                </Button>
+              </form>
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-8">
               <div className="text-lg font-medium mb-3">Current payout</div>
               <div className="text-4xl font-bold">
                 ${(chartQuery.data?.totalInCents! / 100).toFixed(2)}
@@ -259,52 +324,18 @@ export default function Page() {
               </div>
             </div>
 
-            <form action="/api/checkout" method="POST" className="mt-8">
-              <input type="hidden" name="org" value={org} />
-              <input type="hidden" name="repo" value={repo} />
-              <input type="hidden" name="issue" value={issue} />
-              <div className="flex gap-4 items-center">
-                <div className="whitespace-nowrap">I will donate</div>
-                $
-                <Input
-                  type="number"
-                  className="w-[60px]"
-                  placeholder="0"
-                  name="amount"
+            <div className="text-lg font-medium mb-3">Payout timeline</div>
+            <div className="ml-[-16px]">
+              {chartQuery.data ? (
+                <DonationChart
+                  donations={
+                    chartQuery.data.contributions.filter(
+                      (c) => !!c.amount
+                    ) as Donation[]
+                  }
                 />
-                <div className="whitespace-nowrap">if solved in</div>
-                <Select name="expiresIn">
-                  <SelectTrigger aria-label="Expires in">
-                    <SelectValue placeholder="Select expiry" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectScrollUpButton />
-                    <SelectGroup>
-                      <SelectItem value="one_week">1 week</SelectItem>
-                      <SelectItem value="two_weeks">2 weeks</SelectItem>
-                      <SelectItem value="one_month">1 month</SelectItem>
-                      <SelectItem value="three_months">3 months</SelectItem>
-                      <SelectItem value="six_months">6 months</SelectItem>
-                      <SelectItem value="never">Never</SelectItem>
-                    </SelectGroup>
-                    <SelectScrollDownButton />
-                  </SelectContent>
-                </Select>
-                <Button type="submit">Contribute</Button>
-              </div>
-            </form>
-          </div>
-
-          <div>
-            {chartQuery.data ? (
-              <DonationChart
-                donations={
-                  chartQuery.data.contributions.filter(
-                    (c) => !!c.amount
-                  ) as Donation[]
-                }
-              />
-            ) : null}
+              ) : null}
+            </div>
           </div>
         </main>
       ) : null}
