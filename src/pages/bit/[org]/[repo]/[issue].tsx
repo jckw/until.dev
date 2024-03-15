@@ -6,9 +6,12 @@ import { loadStripe } from "@stripe/stripe-js"
 import { Button } from "@/ui/button"
 import { trpc } from "@/utils/trpc"
 import {
+  add,
   addDays,
   differenceInCalendarDays,
   format,
+  formatDistance,
+  formatDistanceStrict,
   formatDistanceToNow,
   isAfter,
 } from "date-fns"
@@ -76,30 +79,35 @@ interface DonationChartProps {
 }
 const DonationChart: React.FC<DonationChartProps> = ({ donations }) => {
   const [startDate] = useState(new Date())
-  const [endDate] = useState(addDays(startDate, 30))
+  const [endDate] = useState(addDays(startDate, 60))
   const chartData = useMemo(
     () => generateChartData(donations, startDate, endDate),
     [JSON.stringify(donations), startDate, endDate]
   )
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={200}>
       <AreaChart data={chartData}>
         <XAxis
           dataKey="date"
           style={{ fontFamily: "monospace", fontSize: "12px" }}
-          tickFormatter={(date: Date) => format(date, "MMM d")}
+          tickFormatter={(date: Date) => formatDistanceStrict(date, startDate)}
           axisLine={false}
-          tickMargin={10}
+          tickMargin={16}
           tickLine={false}
-          minTickGap={50}
+          ticks={
+            [{ weeks: 1 }, { weeks: 2 }, { months: 1 }, { months: 2 }].map(
+              (duration) => add(startDate, duration)
+            ) as any
+          }
         />
         <YAxis
           style={{ fontFamily: "monospace", fontSize: "12px" }}
-          tickFormatter={(value) => `$${value / 100}`}
+          tickFormatter={(value, index) => (index > 0 ? `$${value / 100}` : "")}
           axisLine={false}
           tickLine={false}
-          tickMargin={5}
+          minTickGap={10}
+          tickMargin={16}
         />
         <CartesianGrid vertical={false} horizontal={false} />
         <Tooltip
@@ -116,7 +124,22 @@ const DonationChart: React.FC<DonationChartProps> = ({ donations }) => {
           dataKey="amount"
           stroke="#FD766C"
           fill="#FEE4E1"
-          strokeWidth={2}
+          strokeWidth={3}
+          dot={(props: { index: number; cx: number; cy: number }) => {
+            if (props.index === 0) {
+              return (
+                <circle
+                  r={4}
+                  fill="#FD766C"
+                  // stroke="white"
+                  strokeWidth={2}
+                  cx={props.cx}
+                  cy={props.cy}
+                />
+              )
+            }
+            return <></>
+          }}
         />
       </AreaChart>
     </ResponsiveContainer>
