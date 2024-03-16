@@ -12,7 +12,7 @@ import {
   format,
   formatDistance,
   formatDistanceStrict,
-  formatDistanceToNow,
+  formatDistanceToNowStrict,
   isAfter,
 } from "date-fns"
 import {
@@ -242,29 +242,81 @@ export default function Page() {
       </header>
 
       {resp ? (
-        <main className="mt-8 grid grid-cols-2 gap-8">
-          <div>
-            <div className="flex gap-3 items-start flex-col">
-              <h1 className="text-2xl font-medium">
-                {org}/{repo}#{issue}
-              </h1>
-              <h2 className="text-lg text-gray-500 line-clamp-1">
-                {resp?.title}
-              </h2>
-
-              <div className="flex gap-4 items-center text-sm">
-                <div className="bg-green-700 rounded-full text-white px-4 py-1 font-medium inline-block">
-                  Open
-                </div>
-                <div className="text-gray-500 text-sm">
-                  issue opened{" "}
-                  {formatDistanceToNow(new Date(resp?.created_at!))} ago
-                </div>
-                <div className="text-gray-500">bit started some time ago</div>
+        <main className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 auto-rows-max items-start">
+          <div className="flex gap-3 items-start flex-col row-start-1 col-start-1">
+            <div className="flex gap-4 items-center text-sm">
+              <div className="bg-green-700 rounded-full text-white px-4 py-1 font-medium inline-block">
+                Open
+              </div>
+              <div className="text-gray-500 font-sm flex gap-4">
+                <span>
+                  issue {formatDistanceToNowStrict(new Date(resp?.created_at!))}{" "}
+                  old
+                </span>
+                <span>/</span>
+                <span>bit not very old</span>
               </div>
             </div>
+            <h1 className="text-2xl font-medium">
+              Community-created bounty on closing {repo}#{issue}
+            </h1>
+            <h2 className="text-lg text-gray-500 line-clamp-1">
+              {resp?.title}
+            </h2>
 
-            <div className="border mt-8 p-4 gap-3 flex flex-col">
+            <div className="flex gap-2 items-center">
+              <svg
+                width="16"
+                height="15"
+                viewBox="0 0 16 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M7.57551 0.0891418C3.38644 0.0891418 0 3.48578 0 7.68786C0 11.0469 2.16981 13.8901 5.17991 14.8965C5.55625 14.9721 5.6941 14.7329 5.6941 14.5318C5.6941 14.3556 5.68169 13.7518 5.68169 13.1227C3.57437 13.5756 3.13555 12.2168 3.13555 12.2168C2.79689 11.3362 2.2951 11.1098 2.2951 11.1098C1.60537 10.6443 2.34534 10.6443 2.34534 10.6443C3.11043 10.6947 3.51189 11.4243 3.51189 11.4243C4.18905 12.5817 5.28023 12.2547 5.71922 12.0533C5.78186 11.5627 5.98267 11.223 6.19589 11.0343C4.51515 10.8582 2.7468 10.204 2.7468 7.2852C2.7468 6.4549 3.04763 5.77557 3.52429 5.24724C3.44909 5.05857 3.18563 4.27842 3.59965 3.23427C3.59965 3.23427 4.23929 3.03294 5.68153 4.01426C6.29905 3.84793 6.93578 3.76331 7.57551 3.7626C8.21511 3.7626 8.86718 3.85076 9.46925 4.01426C10.9117 3.03294 11.5513 3.23427 11.5513 3.23427C11.9653 4.27842 11.7017 5.05857 11.6265 5.24724C12.1158 5.77557 12.4042 6.4549 12.4042 7.2852C12.4042 10.204 10.6358 10.8455 8.94251 11.0343C9.21851 11.2733 9.45671 11.7261 9.45671 12.4433C9.45671 13.4623 9.44431 14.2801 9.44431 14.5316C9.44431 14.7329 9.58231 14.9721 9.95851 14.8966C12.9686 13.89 15.1384 11.0469 15.1384 7.68786C15.1508 3.48578 11.752 0.0891418 7.57551 0.0891418Z"
+                  fill="#171515"
+                />
+              </svg>
+              <div className="flex gap-1 items-center font-mono text-sm text-gray-500">
+                <span>{org}</span>
+                <span>/</span>
+                <span>{repo}</span>
+                <span>#</span>
+                <span>{issue}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-start-2 row-start-1 self-end">
+            <div className="text-lg font-medium mb-3">Current payout</div>
+            <div className="text-4xl font-bold">
+              ${(chartQuery.data?.totalInCents! / 100).toFixed(2)}
+            </div>
+            <div className="text-sm text-gray-800 mt-2">
+              ~${((chartQuery.data?.totalInCents! / 100) * 0.95).toFixed(2)}{" "}
+              after transaction fees
+            </div>
+          </div>
+
+          <div>
+            <div className="text-lg font-medium mb-2">Payout timeline</div>
+            <div className="ml-[-16px]">
+              {chartQuery.data ? (
+                <DonationChart
+                  donations={
+                    chartQuery.data.contributions.filter(
+                      (c) => !!c.amount
+                    ) as Donation[]
+                  }
+                />
+              ) : null}
+            </div>
+          </div>
+
+          <div className="row-start-2 col-start-1">
+            <div className="border p-5 gap-3 flex flex-col bg-black rounded-md text-white ">
               <div>I’ll contribute a total of</div>
               <form
                 action="/api/checkout"
@@ -275,22 +327,39 @@ export default function Page() {
                 <input type="hidden" name="repo" value={repo} />
                 <input type="hidden" name="issue" value={issue} />
                 <div className="flex gap-4 items-center">
-                  $
-                  <Input
-                    defaultValue={inputAmount}
-                    onChange={(e) => setInputAmount(e.target.value)}
-                    type="number"
-                    className="w-[60px]"
-                    placeholder="0"
-                    name="amount"
-                  />
-                  <div className="whitespace-nowrap">if solved in</div>
+                  <label
+                    className="border-b-white border-b flex items-center gap-1 text-xl font-medium"
+                    htmlFor="amount"
+                  >
+                    <span className="">$</span>
+                    <input
+                      name="amount"
+                      type="string"
+                      placeholder="0"
+                      defaultValue={inputAmount}
+                      onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        e.target.style.width = `${Math.max(
+                          e.target.value.length,
+                          2
+                        )}ch`
+                      }}
+                      onChange={(e) => setInputAmount(e.target.value)}
+                      style={{ width: "2ch" }}
+                      className="bg-transparent focus:outline-none"
+                    />
+                  </label>
+                  <div className="whitespace-nowrap">
+                    if this issue is solved within{" "}
+                  </div>
                   <Select
                     name="expiresIn"
                     defaultValue={inputExpiresIn}
                     onValueChange={setInputExpiresIn}
                   >
-                    <SelectTrigger aria-label="Expires in">
+                    <SelectTrigger
+                      aria-label="Expires in"
+                      className="border-0 p-0 text-xl font-medium border-b-white border-b rounded-none w-32"
+                    >
                       <SelectValue placeholder="Select expiry" />
                     </SelectTrigger>
                     <SelectContent>
@@ -307,7 +376,10 @@ export default function Page() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button type="submit">
+                <Button
+                  type="submit"
+                  className="bg-white text-gray-900 px-5 py-7 text-md hover:bg-gray-100"
+                >
                   Contribute ${inputAmount} auto-refunding in{" "}
                   {inputExpiresIn === "one_week"
                     ? "1 week"
@@ -323,31 +395,42 @@ export default function Page() {
                 </Button>
               </form>
             </div>
-          </div>
 
-          <div>
-            <div className="mb-8">
-              <div className="text-lg font-medium mb-3">Current payout</div>
-              <div className="text-4xl font-bold">
-                ${(chartQuery.data?.totalInCents! / 100).toFixed(2)}
-              </div>
-              <div className="text-sm text-gray-800 mt-2">
-                ~${((chartQuery.data?.totalInCents! / 100) * 0.95).toFixed(2)}{" "}
-                after transaction fees
-              </div>
-            </div>
+            <div className="p-4 border rounded-md mt-4">
+              <div className="flex gap-4 items-center">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13M12 17H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                    stroke="black"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
 
-            <div className="text-lg font-medium mb-3">Payout timeline</div>
-            <div className="ml-[-16px]">
-              {chartQuery.data ? (
-                <DonationChart
-                  donations={
-                    chartQuery.data.contributions.filter(
-                      (c) => !!c.amount
-                    ) as Donation[]
-                  }
-                />
-              ) : null}
+                <div className="text-m font-medium">How does this work?</div>
+              </div>
+              <div className="mt-2 leading-relaxed text-sm">
+                <p className="mb-1">
+                  If the{" "}
+                  <span className="text-orange-600 font-mono">{org}</span>{" "}
+                  closes issue{" "}
+                  <span className="font-mono text-orange-600">#{issue}</span> in{" "}
+                  <span className="font-mono text-orange-600">{repo}</span>,
+                  they will be rewarded the bounty.
+                </p>
+                <p>
+                  Contibute to the bounty to incentivize its prioritization. If
+                  the issue is not solved by the expiry date you set, you will
+                  be auto-refunded.
+                </p>
+              </div>
             </div>
           </div>
         </main>
