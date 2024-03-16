@@ -242,7 +242,7 @@ export default function Page() {
       </header>
 
       {resp ? (
-        <main className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 auto-rows-max items-start">
+        <main className="mt-8 md:py-8 flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 auto-rows-max md:items-start">
           <div className="flex gap-3 items-start flex-col row-start-1 col-start-1">
             <div className="flex gap-4 items-center text-sm">
               <div className="bg-green-700 rounded-full text-white px-4 py-1 font-medium inline-block">
@@ -289,7 +289,7 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="col-start-2 row-start-1 self-end">
+          <div className="col-start-2 row-start-1 md:self-end">
             <div className="text-lg font-medium mb-3">Current payout</div>
             <div className="text-4xl font-bold">
               ${(chartQuery.data?.totalInCents! / 100).toFixed(2)}
@@ -317,7 +317,6 @@ export default function Page() {
 
           <div className="row-start-2 col-start-1">
             <div className="border p-5 gap-3 flex flex-col bg-black rounded-md text-white ">
-              <div>I’ll contribute a total of</div>
               <form
                 action="/api/checkout"
                 method="POST"
@@ -326,7 +325,9 @@ export default function Page() {
                 <input type="hidden" name="org" value={org} />
                 <input type="hidden" name="repo" value={repo} />
                 <input type="hidden" name="issue" value={issue} />
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-4 items-center flex-wrap">
+                  <div>I’ll contribute</div>
+
                   <label
                     className="border-b-white border-b flex items-center gap-1 text-xl font-medium"
                     htmlFor="amount"
