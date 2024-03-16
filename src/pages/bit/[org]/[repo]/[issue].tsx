@@ -329,11 +329,11 @@ export default function Page() {
                 <input type="hidden" name="org" value={org} />
                 <input type="hidden" name="repo" value={repo} />
                 <input type="hidden" name="issue" value={issue} />
-                <div className="flex gap-4 items-center flex-wrap">
+                <div className="flex gap-[4px] items-center flex-wrap whitespace-break-spaces">
                   <div>I’ll contribute</div>
 
                   <label
-                    className="border-b-white border-b flex items-center gap-1 text-xl font-medium"
+                    className="border-b-white border-b flex items-center gap-1 text-xl font-medium mx-2"
                     htmlFor="amount"
                   >
                     <span className="">$</span>
@@ -353,9 +353,15 @@ export default function Page() {
                       className="bg-transparent focus:outline-none"
                     />
                   </label>
-                  <div className="whitespace-nowrap">
-                    if this issue is solved within{" "}
-                  </div>
+
+                  {"if this issue is solved within"
+                    .split(" ")
+                    .map((word, i) => (
+                      <span key={i} className="whitespace-nowrap">
+                        {word}
+                      </span>
+                    ))}
+
                   <Select
                     name="expiresIn"
                     defaultValue={inputExpiresIn}
@@ -363,7 +369,7 @@ export default function Page() {
                   >
                     <SelectTrigger
                       aria-label="Expires in"
-                      className="border-0 p-0 text-xl font-medium border-b-white border-b rounded-none w-32"
+                      className="border-0 p-0 text-xl font-medium border-b-white border-b rounded-none w-32 mx-2"
                     >
                       <SelectValue placeholder="Select expiry" />
                     </SelectTrigger>
@@ -385,7 +391,24 @@ export default function Page() {
                   type="submit"
                   className="bg-white text-gray-900 px-5 py-7 text-md hover:bg-gray-100"
                 >
-                  Contribute ${inputAmount} auto-refunding in{" "}
+                  <span className="hidden md:inline">
+                    Contribute ${inputAmount} auto-refunding in{" "}
+                    {inputExpiresIn === "one_week"
+                      ? "1 week"
+                      : inputExpiresIn === "two_weeks"
+                      ? "2 weeks"
+                      : inputExpiresIn === "one_month"
+                      ? "1 month"
+                      : inputExpiresIn === "three_months"
+                      ? "3 months"
+                      : inputExpiresIn === "six_months"
+                      ? "6 months"
+                      : "never"}
+                  </span>
+                  <span className="md:hidden">Contribute ${inputAmount}</span>
+                </Button>
+                <div className="text-sm text-gray-200 md:hidden">
+                  You will be auto-refunded if the issue is not solved in{" "}
                   {inputExpiresIn === "one_week"
                     ? "1 week"
                     : inputExpiresIn === "two_weeks"
@@ -397,7 +420,7 @@ export default function Page() {
                     : inputExpiresIn === "six_months"
                     ? "6 months"
                     : "never"}
-                </Button>
+                </div>
               </form>
             </div>
 
