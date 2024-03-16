@@ -51,9 +51,7 @@ export const checkoutSession = pgTable("checkout_session", {
   })
     .notNull()
     .unique(),
-  stripePaymentIntentId: varchar("payment_intent_id", { length: 255 })
-    .unique()
-    .notNull(),
+  stripePaymentIntentId: varchar("payment_intent_id", { length: 255 }).unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   status: checkoutSessionStatusEnum("status").notNull(),
 

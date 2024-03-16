@@ -102,7 +102,6 @@ export default async function handler(
       .values({
         status: session.status || "open",
         stripeCheckoutSessionId: session.id,
-        stripePaymentIntentId: session.payment_intent as string,
 
         bountyIssueId: dbBountyProduct.id,
         amount: centAmount,
