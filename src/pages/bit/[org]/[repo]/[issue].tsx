@@ -64,7 +64,7 @@ export default function Page() {
 
       {issueQuery.data ? (
         <main
-          className={`mt-8 md:py-8 flex flex-col md:grid ${
+          className={`mt-8 md:py-8 grid ${
             issueQuery.data.bountyExists
               ? "md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-4"
               : "grid-cols-1 max-w-3xl md:mx-auto gap-12"
@@ -94,7 +94,7 @@ export default function Page() {
 
           {success ? (
             <ContributionSuccessMessage
-              className="md:col-start-1 md:row-start-2 my-4"
+              className="row-start-2 md:col-start-1 md:row-start-2 md:my-4"
               bountyTotalStr={`$${chartQuery.data?.totalInCents!.toFixed(2)}`}
               bountyLevelExpiresAt={
                 chartQuery.data?.contributions[0]?.expiresAt
