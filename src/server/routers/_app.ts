@@ -3,6 +3,7 @@ import { procedure, router } from "../trpc"
 import { db, schema } from "@/db"
 import { and, eq, sum } from "drizzle-orm"
 import { takeUniqueOrNull } from "@/db/utils"
+import { github } from "@/lib/github"
 
 export const appRouter = router({
   hello: procedure
@@ -15,6 +16,24 @@ export const appRouter = router({
       return {
         greeting: `hello ${opts.input.text}`,
       }
+    }),
+
+  getIssueMeta: procedure
+    .input(
+      z.object({
+        org: z.string(),
+        repo: z.string(),
+        issue: z.number(),
+      })
+    )
+    .query(async (opts) => {
+      const issueRes = await github.issues.get({
+        owner: opts.input.org,
+        repo: opts.input.repo,
+        issue_number: opts.input.issue,
+      })
+
+      return issueRes.data
     }),
 
   getBountyChart: procedure

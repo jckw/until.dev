@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
-import octokit from "@/lib/github"
+import { useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import { Input } from "@/ui/input"
 import { loadStripe } from "@stripe/stripe-js"
@@ -10,7 +9,6 @@ import {
   addDays,
   differenceInCalendarDays,
   format,
-  formatDistance,
   formatDistanceStrict,
   formatDistanceToNowStrict,
   isAfter,
@@ -150,24 +148,16 @@ export default function Page() {
   const router = useRouter()
   const { org, repo, issue } = router.query
 
-  const [resp, setResp] = useState<
-    Awaited<ReturnType<typeof octokit.issues.get>>["data"] | null
-  >(null)
-
-  useEffect(() => {
-    if (!org || !repo || !issue) return
-
-    octokit.issues
-      .get({
-        owner: org as string,
-        repo: repo as string,
-        issue_number: Number(issue),
-      })
-      .then((response) => {
-        setResp(response.data)
-      })
-  }, [org, repo, issue])
-
+  const issueQuery = trpc.getIssueMeta.useQuery(
+    {
+      org: org as string,
+      repo: repo as string,
+      issue: Number(issue),
+    },
+    {
+      enabled: Boolean(org && repo && issue),
+    }
+  )
   const chartQuery = trpc.getBountyChart.useQuery(
     {
       org: org as string,
@@ -218,10 +208,10 @@ export default function Page() {
         <div className="flex items-center justify-center relative">
           <Input
             className="max-w-96 text-center"
-            defaultValue={resp?.html_url}
+            defaultValue={issueQuery.data?.html_url}
           />
           <a
-            href={resp?.html_url}
+            href={issueQuery.data?.html_url}
             target="_blank"
             rel="noopener noreferrer"
             className="ml-2 flex h-9 items-center justify-center rounded-md border border-input bg-transparent p-1 shadow-sm transition-colors   focus-visible:ring-1 focus-visible:ring-ring aspect-square hover:bg-gray-100 hover:cursor-pointer"
@@ -245,7 +235,7 @@ export default function Page() {
         </div>
       </header>
 
-      {resp ? (
+      {issueQuery.data ? (
         <main className="mt-8 md:py-8 flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 auto-rows-max md:items-start">
           <div className="flex gap-3 items-start flex-col row-start-1 col-start-1">
             <div className="flex gap-4 items-center text-sm">
@@ -254,7 +244,10 @@ export default function Page() {
               </div>
               <div className="text-gray-500 font-sm flex gap-4">
                 <span>
-                  issue {formatDistanceToNowStrict(new Date(resp?.created_at!))}{" "}
+                  issue{" "}
+                  {formatDistanceToNowStrict(
+                    new Date(issueQuery.data?.created_at!)
+                  )}{" "}
                   old
                 </span>
                 <span>/</span>
@@ -265,7 +258,7 @@ export default function Page() {
               Community-created bounty on closing {repo}#{issue}
             </h1>
             <h2 className="text-lg text-gray-500 line-clamp-1">
-              {resp?.title}
+              {issueQuery.data?.title}
             </h2>
 
             <div className="flex gap-2 items-center">
