@@ -151,7 +151,7 @@ const AddCommentCTA = ({
   bountyLevelExpiresAt,
 }: {
   bountyTotalStr: string
-  bountyLevelExpiresAt: Date
+  bountyLevelExpiresAt?: string | null // ISO date
 }) => {
   const withinMsg = bountyLevelExpiresAt
     ? ` within ${formatDistanceToNowStrict(
@@ -377,7 +377,9 @@ export default function Page() {
                   bountyTotalStr={`$${(
                     chartQuery.data?.totalInCents! / 100
                   ).toFixed(2)}`}
-                  bountyLevelExpiresAt={chartQuery.data?.bountyLevelExpiresAt!}
+                  bountyLevelExpiresAt={
+                    chartQuery.data?.contributions[0].expiresAt
+                  }
                 />
               </div>
             ) : null}

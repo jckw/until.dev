@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { procedure, router } from "../trpc"
 import { db, schema } from "@/db"
-import { and, eq, sum } from "drizzle-orm"
+import { and, eq, gt, sum } from "drizzle-orm"
 import { takeUniqueOrNull } from "@/db/utils"
 import { github } from "@/lib/github"
 
@@ -60,6 +60,7 @@ export const appRouter = router({
         .from(schema.checkoutSession)
         .where(
           and(
+            gt(schema.checkoutSession.expiresAt, new Date()),
             eq(schema.checkoutSession.bountyIssueId, bounty.id),
             eq(schema.checkoutSession.status, "complete")
           )
@@ -72,6 +73,7 @@ export const appRouter = router({
         .from(schema.checkoutSession)
         .where(
           and(
+            gt(schema.checkoutSession.expiresAt, new Date()),
             eq(schema.checkoutSession.bountyIssueId, bounty.id),
             eq(schema.checkoutSession.status, "complete")
           )
