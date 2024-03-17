@@ -222,7 +222,6 @@ export default function Page() {
 
   const [inputAmount, setInputAmount] = useState("10")
   const [inputExpiresIn, setInputExpiresIn] = useState("one_month")
-  const copyTextRef = useRef<HTMLDivElement>(null)
 
   return (
     <div className="container mx-auto p-6">
@@ -261,10 +260,10 @@ export default function Page() {
         <div className="flex items-center justify-center relative">
           <Input
             className="max-w-96 text-center"
-            defaultValue={issueQuery.data?.html_url}
+            defaultValue={issueQuery.data?.issue.html_url}
           />
           <a
-            href={issueQuery.data?.html_url}
+            href={issueQuery.data?.issue.html_url}
             target="_blank"
             rel="noopener noreferrer"
             className="ml-2 flex h-9 items-center justify-center rounded-md border border-input bg-transparent p-1 shadow-sm transition-colors   focus-visible:ring-1 focus-visible:ring-ring aspect-square hover:bg-gray-100 hover:cursor-pointer"
@@ -292,14 +291,20 @@ export default function Page() {
         <main className="mt-8 md:py-8 flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 auto-rows-max md:items-start">
           <div className="flex gap-3 items-start flex-col row-start-1 col-start-1">
             <div className="flex gap-4 items-center text-sm">
-              <div className="bg-green-700 rounded-full text-white px-4 py-1 font-medium inline-block">
-                Open
-              </div>
+              {issueQuery.data?.bountyExists ? (
+                <div className="bg-green-700 rounded-full text-white px-4 py-1 font-medium inline-block">
+                  Open
+                </div>
+              ) : (
+                <div className="text-gray-800 rounded-full px-4 py-1 font-medium inline-block border-dashed border-2 border-gray-300">
+                  No bounty
+                </div>
+              )}
               <div className="text-gray-500 font-sm flex gap-4">
                 <span>
                   issue{" "}
                   {formatDistanceToNowStrict(
-                    new Date(issueQuery.data?.created_at!)
+                    new Date(issueQuery.data?.issue.created_at!)
                   )}{" "}
                   old
                 </span>
@@ -308,10 +313,13 @@ export default function Page() {
               </div>
             </div>
             <h1 className="text-2xl font-medium">
-              Community-created bounty on closing {repo}#{issue}
+              {issueQuery.data?.bountyExists
+                ? "Community-created bounty for"
+                : "Create bounty for"}{" "}
+              {repo}#{issue}
             </h1>
             <h2 className="text-lg text-gray-500 line-clamp-1">
-              {issueQuery.data?.title}
+              {issueQuery.data?.issue.title}
             </h2>
 
             <div className="flex gap-2 items-center">
@@ -378,7 +386,9 @@ export default function Page() {
                     chartQuery.data?.totalInCents! / 100
                   ).toFixed(2)}`}
                   bountyLevelExpiresAt={
-                    chartQuery.data?.contributions[0].expiresAt
+                    (chartQuery.data?.contributions || []).length > 0
+                      ? chartQuery.data?.contributions[0].expiresAt
+                      : null
                   }
                 />
               </div>
@@ -394,7 +404,11 @@ export default function Page() {
                 <input type="hidden" name="repo" value={repo} />
                 <input type="hidden" name="issue" value={issue} />
                 <div className="flex gap-[4px] items-center flex-wrap whitespace-break-spaces">
-                  <div>I’ll contribute</div>
+                  <div>
+                    {issueQuery.data?.bountyExists
+                      ? "I’ll contribute"
+                      : "Create bounty worth"}
+                  </div>
 
                   <label
                     className="border-b-white border-b flex items-center gap-1 text-xl font-medium mx-2"
@@ -456,7 +470,10 @@ export default function Page() {
                   className="bg-white text-gray-900 px-5 py-7 text-md hover:bg-gray-100"
                 >
                   <span className="hidden md:inline">
-                    Contribute ${inputAmount} auto-refunding in{" "}
+                    {issueQuery.data?.bountyExists
+                      ? "Contribute"
+                      : "Create bounty for"}{" "}
+                    ${inputAmount} auto-refunding in{" "}
                     {inputExpiresIn === "one_week"
                       ? "1 week"
                       : inputExpiresIn === "two_weeks"

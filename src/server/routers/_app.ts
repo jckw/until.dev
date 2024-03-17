@@ -21,7 +21,22 @@ export const appRouter = router({
         issue_number: opts.input.issue,
       })
 
-      return issueRes.data
+      const bountyExists = await db
+        .select()
+        .from(schema.bountyIssue)
+        .where(
+          and(
+            eq(schema.bountyIssue.org, opts.input.org),
+            eq(schema.bountyIssue.repo, opts.input.repo),
+            eq(schema.bountyIssue.issue, opts.input.issue)
+          )
+        )
+        .then((res) => res.length > 0)
+
+      return {
+        issue: issueRes.data,
+        bountyExists,
+      }
     }),
 
   getBountyChart: procedure
