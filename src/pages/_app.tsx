@@ -3,6 +3,7 @@ import { trpc } from "@/utils/trpc"
 import type { AppProps } from "next/app"
 import { Inter } from "next/font/google"
 import { useIsomorphicLayoutEffect } from "react-use"
+import { Toaster } from "sonner"
 
 const interFont = Inter({ subsets: ["latin"] })
 
@@ -11,7 +12,12 @@ function App({ Component, pageProps }: AppProps) {
     document.body.className = `${interFont.className}`
   }, [])
 
-  return <Component {...pageProps} />
+  return (
+    <>
+      <Component {...pageProps} />
+      <Toaster position="top-right" />
+    </>
+  )
 }
 
 export default trpc.withTRPC(App)

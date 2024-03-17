@@ -26,8 +26,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] Create a payment graph showing the payout over time for each issue
 - [x] Add a way to "pause refunds" (e.g. when a claim has been made, but not yet
       verified)
-- [ ] **Prefer datetime fields over boolean (e.g. "paused_at" instead of "paused"/"open")**
-- [ ] **Add a cron job to check for closed issues and automatically pause bounties**
+- [x] Add a cron job to check for closed issues and automatically pause bounties
 - [ ] **Integrate a Github bot that auto comments on issues when bounties are created**
 - [ ] **Have the bot auto-update the bounty amount in the issue comment when it changes**
 - [x] Style issue page to look more legit
