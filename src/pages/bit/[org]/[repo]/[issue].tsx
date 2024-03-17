@@ -63,7 +63,13 @@ export default function Page() {
       <Header activeIssueUrl={issueQuery.data?.issue.html_url} />
 
       {issueQuery.data ? (
-        <main className="mt-8 md:py-8 flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-4 auto-rows-max md:items-start">
+        <main
+          className={`mt-8 md:py-8 flex flex-col md:grid ${
+            issueQuery.data.bountyExists
+              ? "md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-4"
+              : "grid-cols-1 max-w-3xl md:mx-auto gap-12"
+          }   auto-rows-max md:items-start`}
+        >
           <IssueDetails
             className="md:col-start-1 md:row-start-1"
             issue={issueQuery.data.issue}
@@ -73,14 +79,18 @@ export default function Page() {
             bountyExists={issueQuery.data.bountyExists}
           />
 
-          <BountyDetails
-            className="md:col-start-2 md:row-start-1 md:self-end"
-            totalInCents={chartQuery.data?.totalInCents!}
-          />
-          <BountyChart
-            className="md:col-start-2 md:row-start-2 md:row-span-3"
-            contributions={chartQuery.data?.contributions! as Donation[]}
-          />
+          {issueQuery.data.bountyExists ? (
+            <>
+              <BountyDetails
+                className="md:col-start-2 md:row-start-1 md:self-end"
+                totalInCents={chartQuery.data?.totalInCents!}
+              />
+              <BountyChart
+                className="md:col-start-2 md:row-start-2 md:row-span-3"
+                contributions={chartQuery.data?.contributions! as Donation[]}
+              />
+            </>
+          ) : null}
 
           {success ? (
             <ContributionSuccessMessage

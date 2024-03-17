@@ -14,33 +14,21 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## MVP-ready
 
-- [x] Set up DB
-- [x] Record all Stripe products in DB, mapping to org/repo/issue composite key
 - [ ] Set up auto-return functionality
   - [x] Record checkout session in DB with metadata
   - [x] Set up webhook to listen for successful payment
   - [x] Create task to check for expired bounties and automate returns
   - [x] Set up cron job to do task
   - [ ] Write some tests
-- [x] Show the total bounty on an issue
-- [x] Create a payment graph showing the payout over time for each issue
-- [x] Add a way to "pause refunds" (e.g. when a claim has been made, but not yet
-      verified)
-- [x] Add a cron job to check for closed issues and automatically pause bounties
 - [ ] **Integrate a Github bot that auto comments on issues when bounties are created**
 - [ ] **Have the bot auto-update the bounty amount in the issue comment when it changes**
-- [x] Style issue page to look more legit
 - [ ] Create a home page design that shows recently funded bits
-- [ ] Create an issue page design for unstarted issues (i.e. CTA to "Start a bit")
-- [ ] Add success UI for the issue page (and don't reset the contribution amount)
 - [ ] Create a Discord, Twitter, and create a footer
 - [ ] Update the weekend.systems website to mention Fundbit so people don't get confused
       when they see the Stripe charge
 - [ ] Add Terms and Conditions that specify the fees will not be refunded
 - [ ] Add a page for repo owners to claim bounties
-- [ ] Success UI for when a payment goes through (Sonner?)
 - [ ] Error UI for when a payment fails (Sonner?)
-- [ ] Figure out why Shadcn is being painful
 
 ### Future Features
 

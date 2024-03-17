@@ -28,7 +28,7 @@ export const IssueDetails = ({
             Open
           </div>
         ) : (
-          <div className="text-gray-800 rounded-full px-4 py-1 font-medium inline-block border-dashed border-2 border-gray-300">
+          <div className="text-gray-500 rounded-full px-4 py-1 font-medium inline-block border-dashed border-2 border-gray-300">
             No bounty
           </div>
         )}

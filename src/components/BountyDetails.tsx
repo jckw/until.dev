@@ -11,7 +11,7 @@ export const BountyDetails = ({
 }: BountyDetailsProps) => {
   return (
     <div className={cn("", className)}>
-      <div className="text-lg font-medium mb-3">Current payout</div>
+      <div className="text-lg font-medium mb-3">Current bounty</div>
       <div className="text-4xl font-bold">
         ${(totalInCents / 100).toFixed(2)}
       </div>

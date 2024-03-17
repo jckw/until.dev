@@ -103,7 +103,7 @@ export const ContributeForm = ({
                 <SelectItem value="one_month">1 month</SelectItem>
                 <SelectItem value="three_months">3 months</SelectItem>
                 <SelectItem value="six_months">6 months</SelectItem>
-                <SelectItem value="never">Never</SelectItem>
+                <SelectItem value="never">forever</SelectItem>
               </SelectGroup>
               <SelectScrollDownButton />
             </SelectContent>
@@ -116,7 +116,9 @@ export const ContributeForm = ({
         >
           <span className="hidden md:inline">
             {bountyExists ? "Contribute" : "Create bounty for"} ${inputAmount}{" "}
-            auto-refunding in {expiryOptions[inputExpiresIn]}
+            {inputExpiresIn === "never"
+              ? "without expiry"
+              : `auto-refunding in ${expiryOptions[inputExpiresIn]}`}
           </span>
           <span className="md:hidden">Contribute ${inputAmount}</span>
         </Button>
