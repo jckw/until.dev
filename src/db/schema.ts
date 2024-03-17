@@ -10,7 +10,12 @@ import {
 } from "drizzle-orm/pg-core"
 import Stripe from "stripe"
 
-export const bountyStatusList = ["open", "paused"] as const
+export const bountyStatusList = [
+  "open",
+  "paused",
+  "closed_and_claimed",
+  "closed_and_refunded",
+] as const
 export type BountyStatus = (typeof bountyStatusList)[number]
 export const bountyStatusEnum = pgEnum("bounty_status", bountyStatusList)
 
