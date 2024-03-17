@@ -5,8 +5,6 @@ import { useRef } from "react"
 import { useRouter } from "next/router"
 
 export default function Page() {
-  const hello = trpc.hello.useQuery({ text: "world" })
-
   const router = useRouter()
   const urlRef = useRef<HTMLInputElement>(null)
 
@@ -27,7 +25,6 @@ export default function Page() {
       className={`flex min-h-screen flex-col items-center justify-between p-24`}
     >
       <h1 className="text-4xl font-bold">Welcome to Fundbit!</h1>
-      <p className="text-lg">{hello.data?.greeting}</p>
       <form onSubmit={onSubmit}>
         <Input type="text" placeholder="Github Issue URL" ref={urlRef} />
         <Button type="submit">View bit</Button>
