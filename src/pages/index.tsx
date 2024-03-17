@@ -1,6 +1,5 @@
 import { Input } from "@/ui/input"
 import { Button } from "@/ui/button"
-import { trpc } from "@/utils/trpc"
 import { useRef } from "react"
 import { useRouter } from "next/router"
 
