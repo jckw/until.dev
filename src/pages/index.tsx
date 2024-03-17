@@ -2,6 +2,7 @@ import { Input } from "@/ui/input"
 import { Button } from "@/ui/button"
 import { useRef } from "react"
 import { useRouter } from "next/router"
+import { parseGithubUrl } from "@/utils/parseGithubUrl"
 
 export default function Page() {
   const router = useRouter()
@@ -9,13 +10,10 @@ export default function Page() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const url = new URL(urlRef.current?.value || "")
-    // parse URL using regex groups e.g. https://github.com/octokit/rest.js/issues/405
-    const match = url.pathname.match(/\/([^/]+)\/([^/]+)\/issues\/(\d+)/)
+    const { org, repo, id, match } = parseGithubUrl(urlRef.current?.value || "")
     if (!match) {
       return
     }
-    const [, org, repo, id] = match
     router.push(`/bit/${org}/${repo}/${id}`)
   }
 

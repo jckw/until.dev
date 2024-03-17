@@ -1,8 +1,12 @@
 import Link from "next/link"
 import { Logo } from "./icons/Logo"
 import { Input } from "@/ui/input"
+import { useRouter } from "next/router"
+import { parseGithubUrl } from "@/utils/parseGithubUrl"
 
 export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
+  const router = useRouter()
+
   return (
     <header className="relative flex flex-col gap-4">
       <Link
@@ -20,6 +24,14 @@ export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
 
       <div className="flex items-center justify-center relative">
         <Input
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const { org, repo, id } = parseGithubUrl(e.currentTarget.value)
+              if (org && repo && id) {
+                router.push(`/bit/${org}/${repo}/${id}`)
+              }
+            }
+          }}
           className="max-w-96 text-center"
           defaultValue={activeIssueUrl || ""}
         />
