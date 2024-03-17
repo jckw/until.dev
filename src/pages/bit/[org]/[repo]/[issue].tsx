@@ -34,6 +34,7 @@ import {
 } from "@/ui/select"
 import Link from "next/link"
 import { toast } from "sonner"
+import Head from "next/head"
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -225,6 +226,14 @@ export default function Page() {
 
   return (
     <div className="container mx-auto p-6">
+      <Head>
+        <title>
+          {issueQuery.data?.bountyExists
+            ? "Community-created bounty for"
+            : "Create bounty for"}{" "}
+          {repo}#{issue} - Fundbit
+        </title>
+      </Head>
       <header className="relative flex flex-col gap-4">
         <Link
           href="/"
