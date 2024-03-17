@@ -6,18 +6,6 @@ import { takeUniqueOrNull } from "@/db/utils"
 import { github } from "@/lib/github"
 
 export const appRouter = router({
-  hello: procedure
-    .input(
-      z.object({
-        text: z.string(),
-      })
-    )
-    .query((opts) => {
-      return {
-        greeting: `hello ${opts.input.text}`,
-      }
-    }),
-
   getIssueMeta: procedure
     .input(
       z.object({
