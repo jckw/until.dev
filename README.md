@@ -14,12 +14,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## MVP-ready
 
-- [ ] Set up auto-return functionality
-  - [x] Record checkout session in DB with metadata
-  - [x] Set up webhook to listen for successful payment
-  - [x] Create task to check for expired bounties and automate returns
-  - [x] Set up cron job to do task
-  - [ ] Write some tests
 - [ ] **Integrate a Github bot that auto comments on issues when bounties are created**
 - [ ] **Have the bot auto-update the bounty amount in the issue comment when it changes**
 - [ ] Create a home page design that shows recently funded bits
@@ -29,6 +23,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Add Terms and Conditions that specify the fees will not be refunded
 - [ ] Add a page for repo owners to claim bounties
 - [ ] Error UI for when a payment fails (Sonner?)
+- [ ] Consider switching to app router and dropping tRPC
 
 ### Future Features
 

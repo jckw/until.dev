@@ -1,11 +1,43 @@
 import { z } from "zod"
 import { procedure, router } from "../trpc"
 import { db, schema } from "@/db"
-import { and, eq, gt, sum } from "drizzle-orm"
+import { and, count, eq, gt, isNull, or, sum } from "drizzle-orm"
 import { takeUniqueOrNull } from "@/db/utils"
 import { github } from "@/lib/github"
 
 export const appRouter = router({
+  getFeaturedBounties: procedure.query(async () => {
+    const bounties = await db
+      .select({
+        bountyIssueId: schema.bountyIssue.id,
+        org: schema.bountyIssue.org,
+        repo: schema.bountyIssue.repo,
+        issue: schema.bountyIssue.issue,
+        total: sum(schema.checkoutSession.amount).mapWith(Number),
+        contributors: count(schema.checkoutSession.id),
+      })
+      .from(schema.bountyIssue)
+      .leftJoin(
+        schema.checkoutSession,
+        eq(schema.bountyIssue.id, schema.checkoutSession.bountyIssueId)
+      )
+      .where(
+        and(
+          eq(schema.bountyIssue.bountyStatus, "open"),
+          eq(schema.checkoutSession.status, "complete"),
+          or(
+            gt(schema.checkoutSession.expiresAt, new Date()),
+            isNull(schema.checkoutSession.expiresAt)
+          )
+        )
+      )
+      .groupBy(schema.bountyIssue.id)
+      .orderBy(sum(schema.checkoutSession.id))
+      .limit(10)
+
+    return bounties
+  }),
+
   getIssueMeta: procedure
     .input(
       z.object({

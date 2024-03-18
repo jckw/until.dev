@@ -24,6 +24,9 @@ export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
 
       <div className="flex items-center justify-center relative">
         <Input
+          placeholder="Enter a Github Issue URL"
+          spellCheck={false}
+          type="url"
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               const { org, repo, id } = parseGithubUrl(e.currentTarget.value)
