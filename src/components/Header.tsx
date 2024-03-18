@@ -4,7 +4,13 @@ import { Input } from "@/ui/input"
 import { useRouter } from "next/router"
 import { parseGithubUrl } from "@/utils/parseGithubUrl"
 
-export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
+export const Header = ({
+  activeIssueUrl,
+  hideSearchBar,
+}: {
+  activeIssueUrl?: string
+  hideSearchBar?: boolean
+}) => {
   const router = useRouter()
 
   return (
@@ -22,23 +28,25 @@ export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
         <Logo />
       </Link>
 
-      <div className="flex items-center justify-center relative">
-        <Input
-          placeholder="Enter a Github Issue URL"
-          spellCheck={false}
-          type="url"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              const { org, repo, id } = parseGithubUrl(e.currentTarget.value)
-              if (org && repo && id) {
-                router.push(`/bit/${org}/${repo}/${id}`)
+      {hideSearchBar ? null : (
+        <div className="flex items-center justify-center relative">
+          <Input
+            placeholder="Enter a Github Issue URL"
+            spellCheck={false}
+            type="url"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const { org, repo, id } = parseGithubUrl(e.currentTarget.value)
+                if (org && repo && id) {
+                  router.push(`/bit/${org}/${repo}/${id}`)
+                }
               }
-            }
-          }}
-          className="max-w-96 text-center"
-          defaultValue={activeIssueUrl || ""}
-        />
-      </div>
+            }}
+            className="max-w-96 text-center"
+            defaultValue={activeIssueUrl || ""}
+          />
+        </div>
+      )}
     </header>
   )
 }

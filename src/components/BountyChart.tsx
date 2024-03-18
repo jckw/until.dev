@@ -55,9 +55,13 @@ const generateChartData = (
 
 interface DonationChartProps {
   donations: Donation[]
+  height?: number
 }
 
-export const Chart: React.FC<DonationChartProps> = ({ donations }) => {
+export const Chart: React.FC<DonationChartProps> = ({
+  donations,
+  height = 200,
+}) => {
   const [startDate] = useState(new Date())
   const [endDate] = useState(addDays(startDate, 60))
   const chartData = useMemo(
@@ -66,7 +70,7 @@ export const Chart: React.FC<DonationChartProps> = ({ donations }) => {
   )
 
   return (
-    <ResponsiveContainer width="100%" height={200}>
+    <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={chartData}>
         <XAxis
           dataKey="date"

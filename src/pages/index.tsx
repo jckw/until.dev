@@ -30,22 +30,28 @@ const BountyCard = ({
 
   return (
     <div className="bg-white rounded-lg border p-4 flex flex-col gap-2">
-      <h4 className="text-xl font-medium">
+      <div className="text-xl font-medium  text-gray-700">
         {org}/{repo}#{issue}
-      </h4>
-      <div className="text-2xl font-medium">${(total / 100).toFixed(2)}</div>
-      <p className="text-gray-600">
-        {contributors} contributor{contributors === 1 ? " has" : "s have"}{" "}
-        contributed
-      </p>
-      <Chart donations={chartQuery.data?.contributions || ([] as any)} />
+      </div>
+
+      <div className="flex items-center gap-4 mb-2">
+        <div className="text-2xl font-bold font-display">
+          ${(total / 100).toFixed(2)}
+        </div>
+        <p className="text-gray-600 text-sm">
+          {contributors} contributor{contributors === 1 ? "" : "s"}
+        </p>
+      </div>
+      <Chart
+        donations={chartQuery.data?.contributions || ([] as any)}
+        height={150}
+      />
     </div>
   )
 }
 
 export default function Page() {
   const router = useRouter()
-  const urlRef = useRef<HTMLInputElement>(null)
 
   const bountiesQuery = trpc.getFeaturedBounties.useQuery()
 
@@ -54,19 +60,40 @@ export default function Page() {
       <Head>
         <title>Fundbit</title>
       </Head>
-      <Header />
+      <Header hideSearchBar />
       <main className="my-8">
-        <div className="my-16">
-          <h1 className="text-4xl font-medium text-center">
-            Community-created bounties for repo-owners
-          </h1>
-          <h2 className="text-2xl text-center mt-4 text-gray-600">
-            Fund open-source projects you use and get the issues you care about
-            closed
-          </h2>
+        <div className="flex flex-col gap-3 my-16">
+          <div className="my-8">
+            <h1 className="text-[3rem] leading-[3rem] sm:text-[4rem] sm:leading-[4rem] font-extrabold text-center font-display tracking-tight">
+              Open-source Bounties created by the Community
+            </h1>
+            <h2 className="text-2xl text-center mt-4 text-gray-600">
+              Fund open-source projects you use and prioritize the issues you
+              care about
+            </h2>
+          </div>
+          <div className="flex justify-center items-center">
+            <Input
+              className="max-w-[350px]"
+              variant="lg"
+              placeholder="Enter a GitHub issue URL"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const { org, repo, id } = parseGithubUrl(
+                    e.currentTarget.value
+                  )
+                  if (org && repo && id) {
+                    router.push(`/bit/${org}/${repo}/${id}`)
+                  }
+                }
+              }}
+            />
+          </div>
         </div>
-        <div className="flex flex-col gap-3">
-          <h3 className="text-2xl font-medium">Open fundbits</h3>
+        <div className="flex flex-col gap-4">
+          <div className="rounded-full bg-gray-50 px-4 py-2 font-medium inline-block self-start">
+            Recently funded
+          </div>
 
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {bountiesQuery.data?.map((bounty) => (
