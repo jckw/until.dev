@@ -26,6 +26,11 @@ function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
         />
+        <script
+          defer
+          data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+          src="https://plausible.io/js/script.js"
+        ></script>
       </Head>
       <NextTopLoader color="#FD766C" />
       <Component {...pageProps} />
