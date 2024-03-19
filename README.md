@@ -17,9 +17,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Auto-refund should not refund fees
 - [ ] Update the weekend.systems website to mention Fundbit so people don't get confused
       when they see the Stripe charge
-- [ ] Add Terms and Conditions that specify the fees will not be refunded
+- [ ] Add Terms and Conditions, Privacy Policy that specify the fees will not be refunded
 - [ ] Error UI for when a payment fails (Sonner?)
 - [ ] Add Sentry, Plausible
+- [ ] SSR
 
 ### Future Features
 

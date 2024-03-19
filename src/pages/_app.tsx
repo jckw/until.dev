@@ -5,6 +5,7 @@ import type { AppProps } from "next/app"
 import { Inter, Bricolage_Grotesque } from "next/font/google"
 import { useIsomorphicLayoutEffect } from "react-use"
 import { Toaster } from "sonner"
+import NextTopLoader from "nextjs-toploader"
 
 const interFont = Inter({ subsets: ["latin"], variable: "--inter" })
 const bricolageFont = Bricolage_Grotesque({
@@ -19,6 +20,7 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <NextTopLoader color="#FD766C" />
       <Component {...pageProps} />
       <Toaster position="top-right" />
       <Footer />

@@ -7,7 +7,7 @@ const AddCommentCTA = ({
   bountyLevelExpiresAt,
 }: {
   bountyTotalStr: string
-  bountyLevelExpiresAt?: string | null // ISO date
+  bountyLevelExpiresAt?: Date | string | null // ISO date
 }) => {
   const withinMsg = bountyLevelExpiresAt
     ? ` within ${formatDistanceToNowStrict(
@@ -49,7 +49,7 @@ export const ContributionSuccessMessage = ({
   className,
 }: {
   bountyTotalStr: string
-  bountyLevelExpiresAt?: string | null
+  bountyLevelExpiresAt?: Date | string | null
   className?: string
 }) => (
   <div

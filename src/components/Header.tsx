@@ -14,7 +14,7 @@ export const Header = ({
   const router = useRouter()
 
   return (
-    <header className="relative flex flex-col gap-4">
+    <header className="relative flex flex-col gap-4 min-h-12">
       <Link
         href="/"
         className="flex items-center justify-center md:absolute z-50"

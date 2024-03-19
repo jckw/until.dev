@@ -8,6 +8,8 @@ import { Header } from "@/components/Header"
 import { trpc } from "@/utils/trpc"
 import Link from "next/link"
 import { BountyChart, Chart } from "@/components/BountyChart"
+import { createHelpers } from "@/utils/ssr"
+import { GetServerSidePropsContext } from "next"
 
 const BountyCard = ({
   org,
@@ -115,4 +117,16 @@ export default function Page() {
       </main>
     </div>
   )
+}
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const helpers = await createHelpers(ctx)
+
+  await Promise.all([helpers.getFeaturedBounties.fetch()])
+
+  return {
+    props: {
+      trpcState: helpers.dehydrate(),
+    },
+  }
 }

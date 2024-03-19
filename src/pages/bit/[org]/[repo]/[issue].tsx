@@ -11,6 +11,8 @@ import { HowItWorksSection } from "@/components/HowItWorksSection"
 import { ContributeForm } from "@/components/ContributeForm"
 import { ContributionSuccessMessage } from "@/components/ContributionSuccessMessage"
 import { IssueDetails } from "@/components/IssueDetails"
+import { GetServerSidePropsContext } from "next"
+import { createHelpers } from "@/utils/ssr"
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -120,4 +122,27 @@ export default function Page() {
       ) : null}
     </div>
   )
+}
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const helpers = await createHelpers(ctx)
+
+  await Promise.all([
+    helpers.getIssueMeta.fetch({
+      org: ctx.params!.org as string,
+      repo: ctx.params!.repo as string,
+      issue: Number(ctx.params!.issue),
+    }),
+    helpers.getBountyChart.fetch({
+      org: ctx.params!.org as string,
+      repo: ctx.params!.repo as string,
+      issue: Number(ctx.params!.issue),
+    }),
+  ])
+
+  return {
+    props: {
+      trpcState: helpers.dehydrate(),
+    },
+  }
 }
