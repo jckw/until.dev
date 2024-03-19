@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Logo } from "./icons/Logo"
 
 export const Footer = () => {
@@ -6,10 +7,10 @@ export const Footer = () => {
       <div className="mx-auto w-full container px-6 py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
-            <a href="https://www.fundbit.dev/" className="flex items-center">
+            <Link href="/" className="flex items-center">
               <Logo />
               <span className="sr-only">Fundbit</span>
-            </a>
+            </Link>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 sm:max-w-[600px]">
             <div>
@@ -71,9 +72,9 @@ export const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <Link href="/legal/terms" className="hover:underline">
                     Terms &amp; Conditions
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

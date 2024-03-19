@@ -6,6 +6,7 @@ import { Inter, Bricolage_Grotesque } from "next/font/google"
 import { useIsomorphicLayoutEffect } from "react-use"
 import { Toaster } from "sonner"
 import NextTopLoader from "nextjs-toploader"
+import Head from "next/head"
 
 const interFont = Inter({ subsets: ["latin"], variable: "--inter" })
 const bricolageFont = Bricolage_Grotesque({
@@ -20,6 +21,12 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+        />
+      </Head>
       <NextTopLoader color="#FD766C" />
       <Component {...pageProps} />
       <Toaster position="top-right" />
