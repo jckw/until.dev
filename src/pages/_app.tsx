@@ -1,3 +1,4 @@
+import { Footer } from "@/components/Footer"
 import "@/styles/globals.css"
 import { trpc } from "@/utils/trpc"
 import type { AppProps } from "next/app"
@@ -20,6 +21,7 @@ function App({ Component, pageProps }: AppProps) {
     <>
       <Component {...pageProps} />
       <Toaster position="top-right" />
+      <Footer />
     </>
   )
 }

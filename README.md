@@ -14,19 +14,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## MVP-ready
 
-- [ ] **Integrate a Github bot that auto comments on issues when bounties are created**
-- [ ] **Have the bot auto-update the bounty amount in the issue comment when it changes**
-- [ ] Create a home page design that shows recently funded bits
-- [ ] Create a Discord, Twitter, and create a footer
+- [ ] Auto-refund should not refund fees
 - [ ] Update the weekend.systems website to mention Fundbit so people don't get confused
       when they see the Stripe charge
 - [ ] Add Terms and Conditions that specify the fees will not be refunded
-- [ ] Add a page for repo owners to claim bounties
 - [ ] Error UI for when a payment fails (Sonner?)
-- [ ] Consider switching to app router and dropping tRPC
+- [ ] Add Sentry, Plausible
 
 ### Future Features
 
+- [ ] Consider switching to app router and dropping tRPC
 - [ ] Email notifications for bounty status changes
 - [ ] Multi-currency support for global contributions
 - [ ] User profiles for tracking contributions and refunds
