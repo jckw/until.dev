@@ -18,7 +18,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Update the weekend.systems website to mention Fundbit so people don't get confused
       when they see the Stripe charge
 - [ ] Error UI for when a payment fails (Sonner?)
-- [ ] Add Sentry, Plausible
 - [ ] Search should have error state, loading state, etc. Maybe take a search bar
       component from somewhere else
 
