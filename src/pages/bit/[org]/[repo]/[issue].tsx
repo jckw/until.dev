@@ -133,7 +133,7 @@ export default function Page() {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const helpers = await createHelpers(ctx)
 
-  await Promise.all([
+  const [issueMeta] = await Promise.all([
     helpers.getIssueMeta.fetch({
       org: ctx.params!.org as string,
       repo: ctx.params!.repo as string,
@@ -145,6 +145,12 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       issue: Number(ctx.params!.issue),
     }),
   ])
+
+  if (issueMeta.issue === null) {
+    return {
+      notFound: true,
+    }
+  }
 
   return {
     props: {

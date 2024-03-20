@@ -62,11 +62,22 @@ export const appRouter = router({
       })
     )
     .query(async (opts) => {
-      const issueRes = await github.issues.get({
-        owner: opts.input.org,
-        repo: opts.input.repo,
-        issue_number: opts.input.issue,
-      })
+      let issueRes
+      try {
+        issueRes = await github.issues.get({
+          owner: opts.input.org,
+          repo: opts.input.repo,
+          issue_number: opts.input.issue,
+        })
+      } catch (error: any) {
+        if (error.status === 404) {
+          return {
+            issue: null,
+            bountyExists: false,
+          }
+        }
+        throw error
+      }
 
       const bountyExists = await db
         .select()
