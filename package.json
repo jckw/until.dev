@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "make-migrations": "drizzle-kit generate:pg",
-    "migrate": "dotenvx run --env-file .env -- tsx ./src/db/drizzle/migrate.ts"
+    "migrate": "dotenv -e .env -- tsx ./src/db/drizzle/migrate.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.1",
@@ -53,7 +53,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@dotenvx/dotenvx": "^0.24.0",
     "@tailwindcss/typography": "^0.5.10",
     "@types/lodash": "^4.17.0",
     "@types/node": "^20",
@@ -61,6 +60,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "dotenv-cli": "^7.4.1",
     "drizzle-kit": "0.20.8",
     "eslint": "^8",
     "eslint-config-next": "14.1.3",
