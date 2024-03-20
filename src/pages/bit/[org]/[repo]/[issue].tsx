@@ -104,6 +104,9 @@ export default function Page() {
               bountyLevelExpiresAt={
                 chartQuery.data?.contributions[0]?.expiresAt
               }
+              org={org as string}
+              repo={repo as string}
+              issue={issue as string}
             />
           ) : null}
 

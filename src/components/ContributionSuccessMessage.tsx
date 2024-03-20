@@ -3,11 +3,17 @@ import { formatDistanceToNowStrict } from "date-fns"
 import { toast } from "sonner"
 
 const AddCommentCTA = ({
+  org,
+  repo,
+  issue,
   bountyTotalStr,
   bountyLevelExpiresAt,
 }: {
   bountyTotalStr: string
   bountyLevelExpiresAt?: Date | string | null // ISO date
+  org: string
+  repo: string
+  issue: string | number
 }) => {
   const withinMsg = bountyLevelExpiresAt
     ? ` within ${formatDistanceToNowStrict(
@@ -17,13 +23,13 @@ const AddCommentCTA = ({
 
   const message = `I just contributed to the bounty on this issue:
 
-- ${process.env.NEXT_PUBLIC_URL}/bit/{org}/{repo}/{issue}
+${process.env.NEXT_PUBLIC_URL}/bit/${org}/${repo}/${issue}
 
 The current bounty for completing it is ${bountyTotalStr} if it is closed${withinMsg}.`
 
   return (
     <div
-      className="mt-2 cursor-pointer"
+      className="mt-2 cursor-pointer w-full"
       onClick={(e: React.MouseEvent<HTMLDivElement>) => {
         navigator.clipboard.writeText(message)
         toast.success("Copied to clipboard")
@@ -32,9 +38,12 @@ The current bounty for completing it is ${bountyTotalStr} if it is closed${withi
       <div className="text-xs font-bold text-green-300 text-center p-1 bg-green-800 rounded-t-md">
         CLICK TO COPY
       </div>
-      <div className="text-sm block p-3 leading-relaxed whitespace-pre-wrap font-mono w-full bg-green-900 text-green-100 rounded-b-md">
+      <div
+        className="text-sm block p-3 leading-relaxed whitespace-pre-wrap font-mono w-full bg-green-900 text-green-100 rounded-b-md break-words"
+        style={{ wordBreak: "break-word" }}
+      >
         {message.split("\n").map((line, i) => (
-          <p key={i} className="mb-2 last:mb-0">
+          <p key={i} className="mb-2 last:mb-0 break-words">
             {line}
           </p>
         ))}
@@ -44,10 +53,16 @@ The current bounty for completing it is ${bountyTotalStr} if it is closed${withi
 }
 
 export const ContributionSuccessMessage = ({
+  org,
+  repo,
+  issue,
   bountyTotalStr,
   bountyLevelExpiresAt,
   className,
 }: {
+  org: string
+  repo: string
+  issue: string | number
   bountyTotalStr: string
   bountyLevelExpiresAt?: Date | string | null
   className?: string
@@ -63,6 +78,9 @@ export const ContributionSuccessMessage = ({
     </div>
     <div>Please mention your contribution on the repo:</div>
     <AddCommentCTA
+      org={org}
+      repo={repo}
+      issue={issue}
       bountyTotalStr={bountyTotalStr}
       bountyLevelExpiresAt={bountyLevelExpiresAt}
     />
