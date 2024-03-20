@@ -12,6 +12,8 @@ const interFont = Inter({ subsets: ["latin"], variable: "--inter" })
 const bricolageFont = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--bricolage",
+  display: "swap",
+  adjustFontFallback: false,
 })
 
 function App({ Component, pageProps }: AppProps) {
