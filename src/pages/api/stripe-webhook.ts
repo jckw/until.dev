@@ -3,7 +3,6 @@ import { buffer } from "micro"
 import { db, schema } from "@/db"
 import Stripe from "stripe"
 import { eq } from "drizzle-orm"
-import { takeUniqueOrNull } from "@/db/utils"
 import { NextApiRequest, NextApiResponse } from "next"
 
 export const config = {
@@ -46,6 +45,12 @@ const stripeWebhookHandler = async (
         stripeCharge.balance_transaction as string
       )
 
+      if (balanceTx.currency !== "usd") {
+        throw new Error(
+          `Expected balance transaction currency to be USD, but got ${balanceTx.currency}. (${stripeCharge.id})`
+        )
+      }
+
       await db
         .update(schema.contribution)
         .set({
@@ -59,10 +64,6 @@ const stripeWebhookHandler = async (
             stripeCharge.payment_intent as string
           )
         )
-      break
-
-    case "charge.failed":
-      // Mark charge status as failed
       break
 
     case "checkout.session.completed":
