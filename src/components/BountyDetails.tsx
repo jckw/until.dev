@@ -18,7 +18,7 @@ export const BountyDetails = ({
         ${(total / 100).toFixed(2)}
       </div>
       <div className="text-sm text-gray-800 mt-2">
-        ~${(available / 100).toFixed(2)} after transaction fees
+        ~${(available / 100).toFixed(2)} available after fees
       </div>
     </div>
   )

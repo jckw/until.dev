@@ -1,0 +1,45 @@
+import { Header } from '../../components/Header';
+import Link from 'next/link';
+
+<Header />
+
+<div className="prose mx-auto my-16">
+# Simple fee explanation
+
+Fundbit does not intend to profit from failed bounties. We only charge a 5% fee on
+successful bounties which is used to cover the cost of running the platform and to fund
+future development.
+
+### Why does Fundbit refund slightly less than the full amount?
+
+Every contribution incurs a transaction processing fee that must be paid to
+Stripe. Refunded transactions also incur an additional fee of an undetermined amount
+(again, set by Stripe / the payment processor). These fees are not refundable, and if
+your contribution is refunded, you will notice the refunded amount is less than the
+amount you contributed.
+
+Typically, Stripe fees are 2.9% + 30 cents per transaction, but this can vary based on
+the country you are in, the type of card you use, and other factors.
+
+As the refund fee is not fixed nor determinable before the refund happens, we have will likely
+have to charge an additional fee to cover it in the future. Right now, Fundbit covers
+this cost. If you work at Stripe and see this and want to help us out, please reach out!
+
+### How are fees calculated exactly?
+
+You can see the latest source code for the fee calculation on
+<a href="https://github.com/jckw/fundbit">GitHub</a>. We aim to be as transparent as
+possible with our fee structure.
+
+### Disclaimer
+
+This is intended to be a short and helpful guide but are subject to change and may be
+out of date. Please see the full <Link href="/legal/terms">terms of service</Link> for
+the most accurate and up-to-date information.
+
+</div>
+
+export default function MDXPage({ children }) {
+  return <div className="container my-4">{children}</div>;
+}
+

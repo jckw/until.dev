@@ -6,6 +6,26 @@ import { takeUniqueOrNull } from "@/db/utils"
 import { github } from "@/lib/github"
 import { sub } from "date-fns"
 
+const checkoutSessionIsProbablyAvailable = and(
+  isNotNull(schema.checkoutSession.stripePaymentIntentId),
+  or(
+    isNotNull(schema.checkoutSession.successfulStripeChargeId),
+    and(
+      gt(schema.checkoutSession.createdAt, sub(new Date(), { minutes: 15 })),
+      isNull(schema.checkoutSession.successfulStripeChargeId)
+    )
+  ),
+  or(
+    gt(schema.checkoutSession.expiresAt, new Date()),
+    isNull(schema.checkoutSession.expiresAt)
+  )
+)
+
+const checkoutSessionIsDefinitelyAvailable = and(
+  isNotNull(schema.checkoutSession.successfulStripeChargeId),
+  gt(schema.checkoutSession.expiresAt, new Date())
+)
+
 export const appRouter = router({
   getFeaturedBounties: procedure.query(async () => {
     const bounties = await db
@@ -25,11 +45,7 @@ export const appRouter = router({
       .where(
         and(
           eq(schema.bountyIssue.bountyStatus, "open"),
-          isNotNull(schema.checkoutSession.successfulStripeChargeId),
-          or(
-            gt(schema.checkoutSession.expiresAt, new Date()),
-            isNull(schema.checkoutSession.expiresAt)
-          )
+          checkoutSessionIsProbablyAvailable
         )
       )
       .groupBy(schema.bountyIssue.id)
@@ -111,9 +127,8 @@ export const appRouter = router({
         .from(schema.checkoutSession)
         .where(
           and(
-            gt(schema.checkoutSession.expiresAt, new Date()),
             eq(schema.checkoutSession.bountyIssueId, bounty.id),
-            isNotNull(schema.checkoutSession.successfulStripeChargeId)
+            checkoutSessionIsProbablyAvailable
           )
         )
 
@@ -125,20 +140,8 @@ export const appRouter = router({
         .from(schema.checkoutSession)
         .where(
           and(
-            gt(schema.checkoutSession.expiresAt, new Date()),
             eq(schema.checkoutSession.bountyIssueId, bounty.id),
-            or(
-              // Successfully charged
-              isNotNull(schema.checkoutSession.successfulStripeChargeId),
-              // or recently transacted but not yet charged
-              and(
-                gt(
-                  schema.checkoutSession.createdAt,
-                  sub(new Date(), { minutes: 15 })
-                ),
-                isNull(schema.checkoutSession.successfulStripeChargeId)
-              )
-            )
+            checkoutSessionIsProbablyAvailable
           )
         )
         .then(takeUniqueOrNull)

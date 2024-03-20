@@ -73,7 +73,7 @@ export const Footer = () => {
                 </li>
                 <li>
                   <Link href="/legal/terms" className="hover:underline">
-                    Terms &amp; Conditions
+                    Terms of Service
                   </Link>
                 </li>
               </ul>
