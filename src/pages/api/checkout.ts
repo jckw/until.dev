@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { db, schema } from "@/db"
 import { Duration, add } from "date-fns"
+import * as Sentry from "@sentry/node"
 
 const dataSchema = z.object({
   org: z.string(),
@@ -117,6 +118,7 @@ export default async function handler(
 
     res.redirect(303, session.url as string)
   } catch (err: any) {
+    Sentry.captureException(err)
     res.status(err.statusCode || 500).json(err.message)
   }
 }
