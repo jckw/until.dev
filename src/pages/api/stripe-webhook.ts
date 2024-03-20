@@ -47,7 +47,7 @@ const stripeWebhookHandler = async (
       )
 
       await db
-        .update(schema.checkoutSession)
+        .update(schema.contribution)
         .set({
           successfulStripeChargeId: stripeCharge.id as string,
           netAmount: balanceTx.net,
@@ -55,7 +55,7 @@ const stripeWebhookHandler = async (
         })
         .where(
           eq(
-            schema.checkoutSession.stripePaymentIntentId,
+            schema.contribution.stripePaymentIntentId,
             stripeCharge.payment_intent as string
           )
         )
@@ -69,12 +69,17 @@ const stripeWebhookHandler = async (
       const stripeSession = event.data.object as Stripe.Checkout.Session
 
       await db
-        .insert(schema.checkoutSession)
+        .insert(schema.contribution)
         .values({
           stripeCheckoutSessionId: stripeSession.id,
           stripePaymentIntentId: stripeSession.payment_intent as string,
         })
-        .onConflictDoNothing()
+        .onConflictDoUpdate({
+          target: schema.contribution.stripeCheckoutSessionId,
+          set: {
+            stripePaymentIntentId: stripeSession.payment_intent as string,
+          },
+        })
 
       break
 

@@ -98,7 +98,7 @@ export default async function handler(
       : null
 
     await db
-      .insert(schema.checkoutSession)
+      .insert(schema.contribution)
       .values({
         stripeCheckoutSessionId: session.id,
 
@@ -107,8 +107,7 @@ export default async function handler(
         expiresAt: expiresAt,
       })
       .onConflictDoUpdate({
-        // Assume the webhook has beaten us to the punch, so don't overwrite the status
-        target: schema.checkoutSession.stripeCheckoutSessionId,
+        target: schema.contribution.stripeCheckoutSessionId,
         set: {
           bountyIssueId: dbBountyProduct.id,
           amount: centAmount,

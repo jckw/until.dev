@@ -6,24 +6,22 @@ import { takeUniqueOrNull } from "@/db/utils"
 import { github } from "@/lib/github"
 import { sub } from "date-fns"
 
-const checkoutSessionIsProbablyAvailable = and(
-  isNotNull(schema.checkoutSession.stripePaymentIntentId),
+// Filter contributions for those where the payment was successfully charged, or the
+// charge is still unsuccessful and the contribution was created within the last 15
+// minutes
+const contributionIsProbablyAvailable = and(
+  isNotNull(schema.contribution.stripePaymentIntentId),
   or(
-    isNotNull(schema.checkoutSession.successfulStripeChargeId),
+    isNotNull(schema.contribution.successfulStripeChargeId),
     and(
-      gt(schema.checkoutSession.createdAt, sub(new Date(), { minutes: 15 })),
-      isNull(schema.checkoutSession.successfulStripeChargeId)
+      gt(schema.contribution.createdAt, sub(new Date(), { minutes: 15 })),
+      isNull(schema.contribution.successfulStripeChargeId)
     )
   ),
   or(
-    gt(schema.checkoutSession.expiresAt, new Date()),
-    isNull(schema.checkoutSession.expiresAt)
+    gt(schema.contribution.expiresAt, new Date()),
+    isNull(schema.contribution.expiresAt)
   )
-)
-
-const checkoutSessionIsDefinitelyAvailable = and(
-  isNotNull(schema.checkoutSession.successfulStripeChargeId),
-  gt(schema.checkoutSession.expiresAt, new Date())
 )
 
 export const appRouter = router({
@@ -34,22 +32,22 @@ export const appRouter = router({
         org: schema.bountyIssue.org,
         repo: schema.bountyIssue.repo,
         issue: schema.bountyIssue.issue,
-        total: sum(schema.checkoutSession.amount).mapWith(Number),
-        contributors: count(schema.checkoutSession.id),
+        total: sum(schema.contribution.amount).mapWith(Number),
+        contributors: count(schema.contribution.id),
       })
       .from(schema.bountyIssue)
       .leftJoin(
-        schema.checkoutSession,
-        eq(schema.bountyIssue.id, schema.checkoutSession.bountyIssueId)
+        schema.contribution,
+        eq(schema.bountyIssue.id, schema.contribution.bountyIssueId)
       )
       .where(
         and(
           eq(schema.bountyIssue.bountyStatus, "open"),
-          checkoutSessionIsProbablyAvailable
+          contributionIsProbablyAvailable
         )
       )
       .groupBy(schema.bountyIssue.id)
-      .orderBy(sum(schema.checkoutSession.id))
+      .orderBy(sum(schema.contribution.id))
       .limit(10)
 
     return bounties
@@ -121,27 +119,27 @@ export const appRouter = router({
 
       const successfullyChargedContributions = await db
         .select({
-          amount: schema.checkoutSession.amount,
-          expiresAt: schema.checkoutSession.expiresAt,
+          amount: schema.contribution.amount,
+          expiresAt: schema.contribution.expiresAt,
         })
-        .from(schema.checkoutSession)
+        .from(schema.contribution)
         .where(
           and(
-            eq(schema.checkoutSession.bountyIssueId, bounty.id),
-            checkoutSessionIsProbablyAvailable
+            eq(schema.contribution.bountyIssueId, bounty.id),
+            contributionIsProbablyAvailable
           )
         )
 
       const amount = await db
         .select({
-          total: sum(schema.checkoutSession.amount).mapWith(Number),
-          availableTotal: sum(schema.checkoutSession.netAmount).mapWith(Number), // i.e. the successfully charged net amount
+          total: sum(schema.contribution.amount).mapWith(Number),
+          availableTotal: sum(schema.contribution.netAmount).mapWith(Number), // i.e. the successfully charged net amount
         })
-        .from(schema.checkoutSession)
+        .from(schema.contribution)
         .where(
           and(
-            eq(schema.checkoutSession.bountyIssueId, bounty.id),
-            checkoutSessionIsProbablyAvailable
+            eq(schema.contribution.bountyIssueId, bounty.id),
+            contributionIsProbablyAvailable
           )
         )
         .then(takeUniqueOrNull)

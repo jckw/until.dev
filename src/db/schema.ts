@@ -48,15 +48,16 @@ export const checkoutSessionStatusEnum = pgEnum(
   checkoutSessionStatusList
 )
 
-// TODO: Rename as payment note
-export const checkoutSession = pgTable("checkout_session", {
+export const contribution = pgTable("contribution", {
   id: serial("id").primaryKey().notNull(),
   stripeCheckoutSessionId: varchar("stripe_checkout_session_id", {
     length: 255,
   })
     .notNull()
     .unique(),
-  stripePaymentIntentId: varchar("payment_intent_id", { length: 255 }).unique(),
+  stripePaymentIntentId: varchar("stripe_payment_intent_id", {
+    length: 255,
+  }).unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 
   // May be null if the webhook is faster than the insert
@@ -73,5 +74,5 @@ export const checkoutSession = pgTable("checkout_session", {
 })
 
 export const bountyIssueRelations = relations(bountyIssue, ({ many }) => ({
-  checkoutSessions: many(checkoutSession),
+  contributions: many(contribution),
 }))

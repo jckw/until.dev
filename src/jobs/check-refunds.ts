@@ -1,6 +1,6 @@
 import { db, schema } from "@/db"
 import { and, eq, isNotNull, lt } from "drizzle-orm"
-import { Duration, add } from "date-fns"
+import { Duration, sub } from "date-fns"
 import { stripe } from "@/lib/stripe"
 import chunk from "lodash/chunk"
 
@@ -51,20 +51,20 @@ client.defineJob({
     const result = await io.runTask("get-issues", async () => {
       const paymentsToRefund = await db
         .select({
-          paymentIntentId: schema.checkoutSession.stripePaymentIntentId,
-          amountToRefund: schema.checkoutSession.netAmount,
+          paymentIntentId: schema.contribution.stripePaymentIntentId,
+          amountToRefund: schema.contribution.netAmount,
         })
-        .from(schema.checkoutSession)
+        .from(schema.contribution)
         .leftJoin(
           schema.bountyIssue,
-          eq(schema.checkoutSession.bountyIssueId, schema.bountyIssue.id)
+          eq(schema.contribution.bountyIssueId, schema.bountyIssue.id)
         )
         .where(
           and(
             eq(schema.bountyIssue.bountyStatus, "open"),
-            isNotNull(schema.checkoutSession.successfulStripeChargeId),
-            isNotNull(schema.checkoutSession.stripePaymentIntentId),
-            lt(schema.checkoutSession.expiresAt, add(new Date(), GRACE_PERIOD))
+            lt(schema.contribution.expiresAt, sub(new Date(), GRACE_PERIOD)),
+            isNotNull(schema.contribution.successfulStripeChargeId),
+            isNotNull(schema.contribution.stripePaymentIntentId)
           )
         )
 
