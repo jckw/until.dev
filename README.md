@@ -14,14 +14,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## MVP-ready
 
-- [ ] Auto-refund should not refund fees
-- [ ] Set up Stripe to primary accept USD payments to avoid getting hit with currency
-      conversion fees (https://docs.stripe.com/connect/currencies?locale=en-GB)
-- [ ] Update the weekend.systems website to mention Fundbit so people don't get confused
-      when they see the Stripe charge
+- [ ] Test batch refunder
 - [ ] Error UI for when a payment fails (Sonner?)
 - [ ] Search should have error state, loading state, etc. Maybe take a search bar
       component from somewhere else
+- [ ] Deploy prod
 
 ### Future Features
 
