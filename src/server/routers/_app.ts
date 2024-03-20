@@ -1,9 +1,10 @@
 import { z } from "zod"
 import { procedure, router } from "../trpc"
 import { db, schema } from "@/db"
-import { and, count, eq, gt, isNull, or, sum } from "drizzle-orm"
+import { and, count, eq, gt, isNotNull, isNull, or, sum } from "drizzle-orm"
 import { takeUniqueOrNull } from "@/db/utils"
 import { github } from "@/lib/github"
+import { sub } from "date-fns"
 
 export const appRouter = router({
   getFeaturedBounties: procedure.query(async () => {
@@ -24,7 +25,7 @@ export const appRouter = router({
       .where(
         and(
           eq(schema.bountyIssue.bountyStatus, "open"),
-          eq(schema.checkoutSession.status, "complete"),
+          isNotNull(schema.checkoutSession.successfulStripeChargeId),
           or(
             gt(schema.checkoutSession.expiresAt, new Date()),
             isNull(schema.checkoutSession.expiresAt)
@@ -95,11 +96,14 @@ export const appRouter = router({
       if (!bounty) {
         return {
           contributions: [],
-          totalInCents: 0,
+          amount: {
+            total: 0,
+            availableTotal: 0,
+          },
         }
       }
 
-      const successfulCheckouts = await db
+      const successfullyChargedContributions = await db
         .select({
           amount: schema.checkoutSession.amount,
           expiresAt: schema.checkoutSession.expiresAt,
@@ -109,27 +113,42 @@ export const appRouter = router({
           and(
             gt(schema.checkoutSession.expiresAt, new Date()),
             eq(schema.checkoutSession.bountyIssueId, bounty.id),
-            eq(schema.checkoutSession.status, "complete")
+            isNotNull(schema.checkoutSession.successfulStripeChargeId)
           )
         )
 
-      const sumAmount = await db
+      const amount = await db
         .select({
           total: sum(schema.checkoutSession.amount).mapWith(Number),
+          availableTotal: sum(schema.checkoutSession.netAmount).mapWith(Number), // i.e. the successfully charged net amount
         })
         .from(schema.checkoutSession)
         .where(
           and(
             gt(schema.checkoutSession.expiresAt, new Date()),
             eq(schema.checkoutSession.bountyIssueId, bounty.id),
-            eq(schema.checkoutSession.status, "complete")
+            or(
+              // Successfully charged
+              isNotNull(schema.checkoutSession.successfulStripeChargeId),
+              // or recently transacted but not yet charged
+              and(
+                gt(
+                  schema.checkoutSession.createdAt,
+                  sub(new Date(), { minutes: 15 })
+                ),
+                isNull(schema.checkoutSession.successfulStripeChargeId)
+              )
+            )
           )
         )
         .then(takeUniqueOrNull)
 
       return {
-        contributions: successfulCheckouts,
-        totalInCents: sumAmount?.total || 0,
+        contributions: successfullyChargedContributions,
+        amount: {
+          total: amount?.total ?? 0,
+          availableTotal: amount?.availableTotal ?? 0,
+        },
       }
     }),
 })

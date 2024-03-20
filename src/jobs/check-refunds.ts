@@ -1,5 +1,5 @@
 import { db, schema } from "@/db"
-import { and, eq, lt } from "drizzle-orm"
+import { and, eq, isNotNull, lt } from "drizzle-orm"
 import { Duration, add } from "date-fns"
 import { stripe } from "@/lib/stripe"
 import chunk from "lodash/chunk"
@@ -20,6 +20,7 @@ const batchRefunder = client.defineJob({
       paymentsToRefund: z.array(
         z.object({
           paymentIntentId: z.string(),
+          amountToRefund: z.number(),
         })
       ),
     }),
@@ -31,7 +32,7 @@ const batchRefunder = client.defineJob({
         async () => {
           await stripe.refunds.create({
             payment_intent: payment.paymentIntentId,
-            // TODO: Only refund partial amount
+            amount: payment.amountToRefund,
           })
         }
       )
@@ -51,6 +52,7 @@ client.defineJob({
       const paymentsToRefund = await db
         .select({
           paymentIntentId: schema.checkoutSession.stripePaymentIntentId,
+          amountToRefund: schema.checkoutSession.netAmount,
         })
         .from(schema.checkoutSession)
         .leftJoin(
@@ -60,7 +62,8 @@ client.defineJob({
         .where(
           and(
             eq(schema.bountyIssue.bountyStatus, "open"),
-            eq(schema.checkoutSession.status, "complete"),
+            isNotNull(schema.checkoutSession.successfulStripeChargeId),
+            isNotNull(schema.checkoutSession.stripePaymentIntentId),
             lt(schema.checkoutSession.expiresAt, add(new Date(), GRACE_PERIOD))
           )
         )
@@ -81,7 +84,10 @@ client.defineJob({
       }`
 
       await batchRefunder.invoke(cacheKey, {
-        paymentsToRefund: batch as { paymentIntentId: string }[],
+        paymentsToRefund: batch as {
+          paymentIntentId: string
+          amountToRefund: number
+        }[],
       })
     }
   },

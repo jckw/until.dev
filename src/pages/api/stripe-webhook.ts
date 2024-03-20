@@ -38,6 +38,33 @@ const stripeWebhookHandler = async (
   }
 
   switch (event.type) {
+    case "charge.succeeded":
+      // Update the charge status to succeeded and note the net and fee amounts
+      const stripeCharge = event.data.object as Stripe.Charge
+
+      const balanceTx = await stripe.balanceTransactions.retrieve(
+        stripeCharge.balance_transaction as string
+      )
+
+      await db
+        .update(schema.checkoutSession)
+        .set({
+          successfulStripeChargeId: stripeCharge.id as string,
+          netAmount: balanceTx.net,
+          feeAmount: balanceTx.fee,
+        })
+        .where(
+          eq(
+            schema.checkoutSession.stripePaymentIntentId,
+            stripeCharge.payment_intent as string
+          )
+        )
+      break
+
+    case "charge.failed":
+      // Mark charge status as failed
+      break
+
     case "checkout.session.completed":
       const stripeSession = event.data.object as Stripe.Checkout.Session
 
@@ -46,22 +73,11 @@ const stripeWebhookHandler = async (
         .values({
           stripeCheckoutSessionId: stripeSession.id,
           stripePaymentIntentId: stripeSession.payment_intent as string,
-          status: stripeSession.status || "complete",
         })
-        .onConflictDoUpdate({
-          target: schema.checkoutSession.stripeCheckoutSessionId,
-          set: {
-            status: stripeSession.status || "complete",
-          },
-        })
+        .onConflictDoNothing()
 
       break
-    case "refund.created":
-      const stripeRefund = event.data.object as Stripe.Refund
-      // Do we need to store this? Given that refunds should happen automatically when
-      // the expiry date is reached, we might not need to store this.
 
-      break
     default:
       // console.log(`🤷‍♀️ Unhandled event type ${event.type}`)
       break

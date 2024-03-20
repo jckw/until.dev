@@ -58,12 +58,18 @@ export const checkoutSession = pgTable("checkout_session", {
     .unique(),
   stripePaymentIntentId: varchar("payment_intent_id", { length: 255 }).unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  status: checkoutSessionStatusEnum("status").notNull(),
 
   // May be null if the webhook is faster than the insert
   expiresAt: timestamp("expires_at"),
   bountyIssueId: integer("bounty_issue_id").references(() => bountyIssue.id),
   amount: integer("amount"), // in cents
+
+  // Created later
+  successfulStripeChargeId: varchar("successful_stripe_charge_id", {
+    length: 255,
+  }).unique(),
+  netAmount: integer("net_amount"), // in cents
+  feeAmount: integer("fee_amount"), // in cents
 })
 
 export const bountyIssueRelations = relations(bountyIssue, ({ many }) => ({

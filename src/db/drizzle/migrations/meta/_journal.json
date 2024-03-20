@@ -71,6 +71,13 @@
       "when": 1710681535401,
       "tag": "0009_wealthy_gambit",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1710927280136,
+      "tag": "0010_brainy_tana_nile",
+      "breakpoints": true
     }
   ]
 }

@@ -100,7 +100,6 @@ export default async function handler(
     await db
       .insert(schema.checkoutSession)
       .values({
-        status: session.status || "open",
         stripeCheckoutSessionId: session.id,
 
         bountyIssueId: dbBountyProduct.id,

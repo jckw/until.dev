@@ -85,7 +85,8 @@ export default function Page() {
             <>
               <BountyDetails
                 className="md:col-start-2 md:row-start-1 md:self-end"
-                totalInCents={chartQuery.data?.totalInCents!}
+                total={chartQuery.data?.amount.total!}
+                available={chartQuery.data?.amount.availableTotal!}
               />
               <BountyChart
                 className="md:col-start-2 md:row-start-2 md:row-span-3"
@@ -97,7 +98,9 @@ export default function Page() {
           {success ? (
             <ContributionSuccessMessage
               className="row-start-2 md:col-start-1 md:row-start-2 md:my-4"
-              bountyTotalStr={`$${chartQuery.data?.totalInCents!.toFixed(2)}`}
+              bountyTotalStr={`$${(
+                chartQuery.data?.amount.total! / 100
+              ).toFixed(2)}`}
               bountyLevelExpiresAt={
                 chartQuery.data?.contributions[0]?.expiresAt
               }
