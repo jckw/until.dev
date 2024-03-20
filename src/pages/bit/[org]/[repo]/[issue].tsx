@@ -62,7 +62,7 @@ export default function Page() {
         </title>
       </Head>
 
-      <Header activeIssueUrl={issueQuery.data?.issue.html_url} />
+      <Header activeIssueUrl={issueQuery.data?.issue?.html_url || ""} />
 
       {issueQuery.data ? (
         <main
