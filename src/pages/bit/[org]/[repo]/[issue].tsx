@@ -55,7 +55,7 @@ export default function Page() {
     <div className="container mx-auto p-6">
       <Head>
         <title>
-          {issueQuery.data?.bountyExists
+          {issueQuery.data?.bounty
             ? "Community-created bounty for"
             : "Create bounty for"}{" "}
           {repo}#{issue} - Fundbit
@@ -67,21 +67,21 @@ export default function Page() {
       {issueQuery.data ? (
         <main
           className={`mt-8 md:py-8 grid ${
-            issueQuery.data.bountyExists
+            issueQuery.data.bounty
               ? "md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-4"
               : "grid-cols-1 max-w-3xl md:mx-auto gap-12"
           }   auto-rows-max md:items-start`}
         >
           <IssueDetails
             className="md:col-start-1 md:row-start-1"
-            issue={issueQuery.data.issue}
+            issue={issueQuery.data.issue!}
             org={org as string}
             repo={repo as string}
             issueNumber={Number(issue)}
-            bountyExists={issueQuery.data.bountyExists}
+            bounty={issueQuery.data.bounty}
           />
 
-          {issueQuery.data.bountyExists ? (
+          {issueQuery.data.bounty ? (
             <>
               <BountyDetails
                 className="md:col-start-2 md:row-start-1 md:self-end"
@@ -115,7 +115,7 @@ export default function Page() {
               org={org as string}
               repo={repo as string}
               issue={Number(issue)}
-              bountyExists={issueQuery.data.bountyExists}
+              bountyExists={!!issueQuery.data.bounty}
             />
 
             <HowItWorksSection

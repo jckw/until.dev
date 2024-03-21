@@ -2,7 +2,7 @@ import { z } from "zod"
 import { procedure, router } from "../trpc"
 import { db, schema } from "@/db"
 import { and, count, eq, gt, isNotNull, isNull, or, sum } from "drizzle-orm"
-import { takeUniqueOrNull } from "@/db/utils"
+import { takeUniqueOrNull, takeUniqueOrThrow } from "@/db/utils"
 import { github } from "@/lib/github"
 import { sub } from "date-fns"
 
@@ -73,14 +73,16 @@ export const appRouter = router({
         if (error.status === 404) {
           return {
             issue: null,
-            bountyExists: false,
+            bounty: null,
           }
         }
         throw error
       }
 
-      const bountyExists = await db
-        .select()
+      const bounty = await db
+        .select({
+          status: schema.bountyIssue.bountyStatus,
+        })
         .from(schema.bountyIssue)
         .where(
           and(
@@ -89,11 +91,11 @@ export const appRouter = router({
             eq(schema.bountyIssue.issue, opts.input.issue)
           )
         )
-        .then((res) => res.length > 0)
+        .then(takeUniqueOrThrow)
 
       return {
         issue: issueRes.data,
-        bountyExists,
+        bounty,
       }
     }),
 
