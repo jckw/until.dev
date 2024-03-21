@@ -14,11 +14,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## MVP-ready
 
+### Lower priority
+
+- [ ] Prevent donations on closed issues
 - [ ] Test batch refunder
-- [ ] Error UI for when a payment fails (Sonner?)
-- [ ] Search should have error state, loading state, etc. Maybe take a search bar
-      component from somewhere else
-- [ ] Deploy prod
+- [ ] Test issue checker
+- [ ] Maybe make Stripe webhook into Trigger job
+- [ ] Convert staging to prod and make another staging instance
 
 ### Future Features
 
