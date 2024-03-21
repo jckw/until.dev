@@ -47,6 +47,12 @@ export const ContributeForm = ({
       )}
     >
       <form
+        onSubmit={(e) => {
+          if (Number(inputAmount) < 3) {
+            e.preventDefault()
+            return
+          }
+        }}
         action="/api/checkout"
         method="POST"
         className="gap-3 flex flex-col"
@@ -115,17 +121,24 @@ export const ContributeForm = ({
           className="bg-white text-gray-900 px-5 py-7 text-md hover:bg-gray-100"
         >
           <span className="hidden md:inline">
-            {bountyExists ? "Contribute" : "Create bounty for"} ${inputAmount}{" "}
+            {bountyExists ? "Contribute" : "Create bounty for"} $
+            {inputAmount || "0"}{" "}
             {inputExpiresIn === "never"
               ? "without expiry"
               : `auto-refunding in ${expiryOptions[inputExpiresIn]}`}
           </span>
-          <span className="md:hidden">Contribute ${inputAmount}</span>
+          <span className="md:hidden">Contribute ${inputAmount || "0"}</span>
         </Button>
         <div className="text-sm text-gray-200 md:hidden">
           You will be auto-refunded if the issue is not solved in{" "}
           <span className="font-medium">{expiryOptions[inputExpiresIn]}</span>
         </div>
+
+        {Number(inputAmount) < 3 ? (
+          <span className="text-red-300 font-medium text-sm">
+            Minimum bounty is $3, anything less will get eaten by fees.
+          </span>
+        ) : null}
       </form>
     </div>
   )

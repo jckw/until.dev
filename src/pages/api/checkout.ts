@@ -10,7 +10,7 @@ const dataSchema = z.object({
   org: z.string(),
   repo: z.string(),
   issue: z.coerce.number(),
-  amount: z.coerce.number(),
+  amount: z.coerce.number().min(3),
   expiresIn: z.enum([
     "one_week",
     "two_weeks",
