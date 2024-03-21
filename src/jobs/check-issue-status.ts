@@ -18,6 +18,9 @@ const issueStatusChecker = client.defineJob({
       issue: z.number(),
     }),
   }),
+  integrations: {
+    resend,
+  },
   run: async (payload, io, ctx) => {
     const issue = await github.issues.get({
       owner: payload.org,
@@ -42,7 +45,7 @@ const issueStatusChecker = client.defineJob({
         )
     })
 
-    resend.emails.send(
+    io.resend.emails.send(
       `bounty-issue-closed-email-${payload.org}-${payload.repo}-${payload.issue}`,
       {
         from: "fundbit@apps.weekend.systems",
