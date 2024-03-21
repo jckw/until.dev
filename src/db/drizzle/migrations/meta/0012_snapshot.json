@@ -1,0 +1,203 @@
+{
+  "id": "44768da3-1ea4-4f9a-890b-8c31bdc7d704",
+  "prevId": "2bc9f1d6-1eaa-45c5-a6db-466d407c42e6",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "bounty_issue": {
+      "name": "bounty_issue",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "org": {
+          "name": "org",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "repo": {
+          "name": "repo",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "issue": {
+          "name": "issue",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stripe_product_id": {
+          "name": "stripe_product_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bounty_status": {
+          "name": "bounty_status",
+          "type": "bounty_status",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'open'"
+        },
+        "paused_at": {
+          "name": "paused_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "bounty_issue_org_repo_issue_unique": {
+          "name": "bounty_issue_org_repo_issue_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org",
+            "repo",
+            "issue"
+          ]
+        }
+      }
+    },
+    "contribution": {
+      "name": "contribution",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "stripe_checkout_session_id": {
+          "name": "stripe_checkout_session_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stripe_payment_intent_id": {
+          "name": "stripe_payment_intent_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bounty_issue_id": {
+          "name": "bounty_issue_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "successful_stripe_charge_id": {
+          "name": "successful_stripe_charge_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "net_amount": {
+          "name": "net_amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fee_amount": {
+          "name": "fee_amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "contribution_bounty_issue_id_bounty_issue_id_fk": {
+          "name": "contribution_bounty_issue_id_bounty_issue_id_fk",
+          "tableFrom": "contribution",
+          "tableTo": "bounty_issue",
+          "columnsFrom": [
+            "bounty_issue_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "contribution_stripe_checkout_session_id_unique": {
+          "name": "contribution_stripe_checkout_session_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "stripe_checkout_session_id"
+          ]
+        },
+        "contribution_stripe_payment_intent_id_unique": {
+          "name": "contribution_stripe_payment_intent_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "stripe_payment_intent_id"
+          ]
+        },
+        "contribution_successful_stripe_charge_id_unique": {
+          "name": "contribution_successful_stripe_charge_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "successful_stripe_charge_id"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {
+    "bounty_status": {
+      "name": "bounty_status",
+      "values": {
+        "open": "open",
+        "paused": "paused",
+        "closed_and_claimed": "closed_and_claimed",
+        "closed_and_refunded": "closed_and_refunded"
+      }
+    },
+    "checkout_session_status": {
+      "name": "checkout_session_status",
+      "values": {
+        "complete": "complete",
+        "expired": "expired",
+        "open": "open"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

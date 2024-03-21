@@ -31,6 +31,7 @@ export const bountyIssue = pgTable(
     stripeProductId: varchar("stripe_product_id", { length: 255 }).notNull(),
 
     bountyStatus: bountyStatusEnum("bounty_status").default("open").notNull(),
+    pausedAt: timestamp("paused_at"),
   },
   (t) => ({
     uniqueOrgRepoIssue: unique().on(t.org, t.repo, t.issue),

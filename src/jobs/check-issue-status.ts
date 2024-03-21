@@ -35,7 +35,7 @@ const issueStatusChecker = client.defineJob({
     await io.runTask("update-bounty-status", async () => {
       await db
         .update(schema.bountyIssue)
-        .set({ bountyStatus: "paused" })
+        .set({ bountyStatus: "paused", pausedAt: new Date() })
         .where(
           and(
             eq(schema.bountyIssue.org, payload.org),

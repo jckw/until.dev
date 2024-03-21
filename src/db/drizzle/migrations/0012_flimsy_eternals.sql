@@ -1,0 +1,1 @@
+ALTER TABLE "bounty_issue" ADD COLUMN "paused_at" timestamp;
