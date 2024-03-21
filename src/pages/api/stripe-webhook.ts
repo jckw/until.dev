@@ -11,6 +11,32 @@ export const config = {
   },
 }
 
+const attemptToRecordSuccessfulCharge = async (stripeCharge: Stripe.Charge) => {
+  const balanceTx = await stripe.balanceTransactions.retrieve(
+    stripeCharge.balance_transaction as string
+  )
+
+  if (balanceTx.currency !== "usd") {
+    throw new Error(
+      `Expected balance transaction currency to be USD, but got ${balanceTx.currency}. (${stripeCharge.id})`
+    )
+  }
+
+  await db
+    .update(schema.contribution)
+    .set({
+      successfulStripeChargeId: stripeCharge.id as string,
+      netAmount: balanceTx.net,
+      feeAmount: balanceTx.fee,
+    })
+    .where(
+      eq(
+        schema.contribution.stripePaymentIntentId,
+        stripeCharge.payment_intent as string
+      )
+    )
+}
+
 const stripeWebhookHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -41,29 +67,10 @@ const stripeWebhookHandler = async (
       // Update the charge status to succeeded and note the net and fee amounts
       const stripeCharge = event.data.object as Stripe.Charge
 
-      const balanceTx = await stripe.balanceTransactions.retrieve(
-        stripeCharge.balance_transaction as string
-      )
+      // Attempt to record successful charge. This may not record anything in the DB if
+      // this webhook is received before the checkout session webhook.
+      await attemptToRecordSuccessfulCharge(stripeCharge)
 
-      if (balanceTx.currency !== "usd") {
-        throw new Error(
-          `Expected balance transaction currency to be USD, but got ${balanceTx.currency}. (${stripeCharge.id})`
-        )
-      }
-
-      await db
-        .update(schema.contribution)
-        .set({
-          successfulStripeChargeId: stripeCharge.id as string,
-          netAmount: balanceTx.net,
-          feeAmount: balanceTx.fee,
-        })
-        .where(
-          eq(
-            schema.contribution.stripePaymentIntentId,
-            stripeCharge.payment_intent as string
-          )
-        )
       break
 
     case "checkout.session.completed":
@@ -82,6 +89,19 @@ const stripeWebhookHandler = async (
           },
         })
 
+      const paymentIntent = await stripe.paymentIntents.retrieve(
+        stripeSession.payment_intent as string,
+        { expand: ["latest_charge"] }
+      )
+
+      if (
+        (paymentIntent.latest_charge as Stripe.Charge | null)?.status ===
+        "succeeded"
+      ) {
+        await attemptToRecordSuccessfulCharge(
+          paymentIntent.latest_charge as Stripe.Charge
+        )
+      }
       break
 
     default:
