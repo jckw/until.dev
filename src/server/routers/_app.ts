@@ -1,7 +1,18 @@
 import { z } from "zod"
 import { procedure, router } from "../trpc"
 import { db, schema } from "@/db"
-import { and, count, eq, gt, isNotNull, isNull, or, sum } from "drizzle-orm"
+import {
+  and,
+  count,
+  desc,
+  eq,
+  gt,
+  isNotNull,
+  isNull,
+  max,
+  or,
+  sum,
+} from "drizzle-orm"
 import { takeUniqueOrNull, takeUniqueOrThrow } from "@/db/utils"
 import { github } from "@/lib/github"
 import { sub } from "date-fns"
@@ -40,14 +51,9 @@ export const appRouter = router({
         schema.contribution,
         eq(schema.bountyIssue.id, schema.contribution.bountyIssueId)
       )
-      .where(
-        and(
-          eq(schema.bountyIssue.bountyStatus, "open"),
-          contributionIsProbablyAvailable
-        )
-      )
+      .where(and(contributionIsProbablyAvailable))
       .groupBy(schema.bountyIssue.id)
-      .orderBy(sum(schema.contribution.id))
+      .orderBy(desc(max(schema.contribution.createdAt)))
       .limit(10)
 
     return bounties
