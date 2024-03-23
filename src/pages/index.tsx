@@ -60,7 +60,7 @@ export default function Page() {
   return (
     <div className="container mx-auto p-6">
       <Head>
-        <title>Fundbit</title>
+        <title>{process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
       <Header hideSearchBar />
       <main className="my-8">

@@ -86,8 +86,9 @@ export const IssueDetails = ({
         <div className="rounded border border-yellow-500 p-4 text-yellow-900 font-medium">
           <p className="mb-2">
             This bounty is paused as that the repo owner has closed the issue.
-            Refunds will therefore not be issued until the Fundbit team assesses
-            whether the issue has been resolved.
+            Refunds will therefore not be issued until the{" "}
+            {process.env.NEXT_PUBLIC_APP_NAME} team assesses whether the issue
+            has been resolved.
           </p>
           <p>
             If the issue is resolved, the bounty will be paid out to the repo

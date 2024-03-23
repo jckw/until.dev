@@ -9,7 +9,9 @@ export const Footer = () => {
           <div className="mb-6 md:mb-0">
             <Link href="/" className="flex items-center">
               <Logo />
-              <span className="sr-only">Fundbit</span>
+              <span className="sr-only">
+                {process.env.NEXT_PUBLIC_APP_NAME}
+              </span>
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 sm:max-w-[600px]">
@@ -85,7 +87,7 @@ export const Footer = () => {
           <span className="text-sm text-gray-500 sm:text-center">
             © {new Date().getFullYear()}{" "}
             <a href="https://www.fundbit.dev/" className="hover:underline">
-              Fundbit™
+              {process.env.NEXT_PUBLIC_APP_NAME}™
             </a>{" "}
             by weekend.systems. All Rights Reserved.
           </span>

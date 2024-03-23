@@ -6,11 +6,11 @@ import Link from 'next/link';
 <div className="prose mx-auto my-16">
 # Simple fee explanation
 
-Fundbit does not intend to profit from failed bounties. We only charge a 5% fee on
+{process.env.NEXT_PUBLIC_APP_NAME} does not intend to profit from failed bounties. We only charge a 5% fee on
 successful bounties which is used to cover the cost of running the platform and to fund
 future development.
 
-### Why does Fundbit refund slightly less than the full amount?
+### Why does {process.env.NEXT_PUBLIC_APP_NAME} refund slightly less than the full amount?
 
 Every contribution incurs a transaction processing fee that must be paid to
 Stripe. Refunded transactions also incur an additional fee of an undetermined amount
@@ -22,7 +22,7 @@ Typically, Stripe fees are 2.9% + 30 cents per transaction, but this can vary ba
 the country you are in, the type of card you use, and other factors.
 
 As the refund fee is not fixed nor determinable before the refund happens, we have will likely
-have to charge an additional fee to cover it in the future. Right now, Fundbit covers
+have to charge an additional fee to cover it in the future. Right now, {process.env.NEXT_PUBLIC_APP_NAME} covers
 this cost. If you work at Stripe and see this and want to help us out, please reach out!
 
 ### How are fees calculated exactly?

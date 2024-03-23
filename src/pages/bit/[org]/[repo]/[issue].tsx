@@ -58,7 +58,7 @@ export default function Page() {
           {issueQuery.data?.bounty
             ? "Community-created bounty for"
             : "Create bounty for"}{" "}
-          {repo}#{issue} - Fundbit
+          {repo}#{issue} - {process.env.NEXT_PUBLIC_APP_NAME}
         </title>
       </Head>
 
