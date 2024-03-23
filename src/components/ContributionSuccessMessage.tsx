@@ -25,7 +25,9 @@ const AddCommentCTA = ({
 
 ${process.env.NEXT_PUBLIC_URL}/bounty/${org}/${repo}/${issue}
 
-The current bounty for completing it is ${bountyTotalStr} if it is closed${withinMsg}.`
+The current bounty for completing it is ${bountyTotalStr} if it is closed${withinMsg}.
+
+Others can also contribute to the bounty to increase it.`
 
   return (
     <div
