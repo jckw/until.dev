@@ -69,6 +69,15 @@ export const Footer = () => {
               </h2>
               <ul className="text-gray-500 font-medium">
                 <li className="mb-4">
+                  <Link
+                    target="_blank"
+                    href="/legal/fees"
+                    className="hover:underline "
+                  >
+                    Simple fee explanation
+                  </Link>
+                </li>
+                <li className="mb-4">
                   <Link href="/legal/privacy" className="hover:underline">
                     Privacy Policy
                   </Link>

@@ -1,4 +1,5 @@
 import { cn } from "@/utils"
+import Link from "next/link"
 
 interface BountyDetailsProps {
   total: number
@@ -18,7 +19,14 @@ export const BountyDetails = ({
         ${(total / 100).toFixed(2)}
       </div>
       <div className="text-sm text-gray-800 mt-2">
-        ~${(available / 100).toFixed(2)} available after fees
+        ~${(available / 100).toFixed(2)} available after{" "}
+        <Link
+          href="/legal/fees"
+          target="_blank"
+          style={{ textDecoration: "underline" }}
+        >
+          fees
+        </Link>
       </div>
     </div>
   )
