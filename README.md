@@ -1,4 +1,4 @@
-# fundbit
+# Until.dev
 
 > Crowdfund reverse-bounties for open-source issues
 

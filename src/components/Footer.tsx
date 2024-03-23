@@ -47,7 +47,7 @@ export const Footer = () => {
               <ul className="text-gray-500 font-medium">
                 <li className="mb-4">
                   <a
-                    href="https://github.com/jckw/fundbit"
+                    href="https://github.com/jckw/until.dev"
                     className="hover:underline "
                   >
                     GitHub
@@ -136,7 +136,7 @@ export const Footer = () => {
               <span className="sr-only">Twitter page</span>
             </a>
             <a
-              href="https://github.com/jckw/fundbit"
+              href="https://github.com/jckw/until.dev"
               className="text-gray-500 hover:text-gray-900:text-white ms-5"
             >
               <svg
