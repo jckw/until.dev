@@ -74,11 +74,9 @@ export default function Page() {
         >
           <IssueDetails
             className="md:col-start-1 md:row-start-1"
-            issue={issueQuery.data.issue!}
             org={org as string}
             repo={repo as string}
-            issueNumber={Number(issue)}
-            bounty={issueQuery.data.bounty}
+            meta={issueQuery.data}
           />
 
           {issueQuery.data.bounty ? (
