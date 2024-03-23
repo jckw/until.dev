@@ -1,0 +1,1 @@
+ALTER TABLE "bounty_issue" ADD COLUMN "created_at" timestamp DEFAULT now() NOT NULL;
