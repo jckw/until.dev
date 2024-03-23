@@ -98,7 +98,7 @@ export const appRouter = router({
             eq(schema.bountyIssue.issue, opts.input.issue)
           )
         )
-        .then(takeUniqueOrThrow)
+        .then(takeUniqueOrNull)
 
       return {
         issue: issueRes.data,
