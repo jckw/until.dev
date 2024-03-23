@@ -85,7 +85,7 @@ export default function Page() {
                     e.currentTarget.value
                   )
                   if (org && repo && id) {
-                    router.push(`/bit/${org}/${repo}/${id}`)
+                    router.push(`/bounty/${org}/${repo}/${id}`)
                   }
                 }
               }}
@@ -100,7 +100,7 @@ export default function Page() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {bountiesQuery.data?.map((bounty) => (
               <Link
-                href={`/bit/${bounty.org}/${bounty.repo}/${bounty.issue}`}
+                href={`/bounty/${bounty.org}/${bounty.repo}/${bounty.issue}`}
                 key={bounty.bountyIssueId}
               >
                 <BountyCard

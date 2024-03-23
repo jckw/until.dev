@@ -38,7 +38,7 @@ export const Header = ({
               if (e.key === "Enter") {
                 const { org, repo, id } = parseGithubUrl(e.currentTarget.value)
                 if (org && repo && id) {
-                  router.push(`/bit/${org}/${repo}/${id}`)
+                  router.push(`/bounty/${org}/${repo}/${id}`)
                 }
               }
             }}

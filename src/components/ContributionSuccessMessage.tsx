@@ -23,7 +23,7 @@ const AddCommentCTA = ({
 
   const message = `I just contributed to the bounty on this issue:
 
-${process.env.NEXT_PUBLIC_URL}/bit/${org}/${repo}/${issue}
+${process.env.NEXT_PUBLIC_URL}/bounty/${org}/${repo}/${issue}
 
 The current bounty for completing it is ${bountyTotalStr} if it is closed${withinMsg}.`
 

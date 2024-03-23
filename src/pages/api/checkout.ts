@@ -90,8 +90,8 @@ export default async function handler(
                 }, the funds will be returned to you.`,
         },
       },
-      success_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.issue}?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}/bit/${parsed.data.org}/${parsed.data.repo}/${parsed.data.issue}?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_URL}/bounty/${parsed.data.org}/${parsed.data.repo}/${parsed.data.issue}?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/bounty/${parsed.data.org}/${parsed.data.repo}/${parsed.data.issue}?canceled=true`,
     })
 
     const expiresAt = EXPIRY_MAP[parsed.data.expiresIn]["add"]
