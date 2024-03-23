@@ -31,18 +31,20 @@ const BountyCard = ({
   })
 
   return (
-    <div className="bg-white rounded-lg border p-4 flex flex-col gap-2">
-      <div className="text-xl font-medium  text-gray-700">
-        {org}/{repo}#{issue}
-      </div>
-
-      <div className="flex items-center gap-4 mb-2">
-        <div className="text-2xl font-bold font-display">
-          ${(total / 100).toFixed(2)}
+    <div className="bg-white rounded-lg border p-4 flex flex-col gap-2 h-full justify-between">
+      <div>
+        <div className="text-xl font-medium  text-gray-700">
+          {org}/{repo}#{issue}
         </div>
-        <p className="text-gray-600 text-sm">
-          {contributors} contributor{contributors === 1 ? "" : "s"}
-        </p>
+
+        <div className="flex items-center gap-4 mb-2">
+          <div className="text-2xl font-bold font-display">
+            ${(total / 100).toFixed(2)}
+          </div>
+          <p className="text-gray-600 text-sm">
+            {contributors} contributor{contributors === 1 ? "" : "s"}
+          </p>
+        </div>
       </div>
       <Chart
         donations={chartQuery.data?.contributions || ([] as any)}
