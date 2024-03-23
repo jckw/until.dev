@@ -86,7 +86,7 @@ export const Footer = () => {
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="text-sm text-gray-500 sm:text-center">
             © {new Date().getFullYear()}{" "}
-            <a href="https://www.fundbit.dev/" className="hover:underline">
+            <a href={process.env.NEXT_PUBLIC_URL} className="hover:underline">
               {process.env.NEXT_PUBLIC_APP_NAME}™
             </a>{" "}
             by weekend.systems. All Rights Reserved.
