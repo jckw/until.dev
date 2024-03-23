@@ -6,6 +6,16 @@ import Link from 'next/link';
 <div className="prose mx-auto my-16">
 # Simple fee explanation
 
+For every bounty, you will see a bounty amount and an amount "after fees". The total
+amount is the actual amount contributed by the community that hasn't yet been refunded,
+whereas the amount "after fees" is an estimate of the amount that will be disbursed on
+succesful completion of the bounty.
+
+The fees are calculated as follows:
+
+- Stripe fees: ~2.9% + 30 cents per transaction (varies by country and card type)
+- {process.env.NEXT_PUBLIC_APP_NAME} platform fees: 5% of the total bounty amount
+
 {process.env.NEXT_PUBLIC_APP_NAME} does not intend to profit from failed bounties. We only charge a 5% fee on
 successful bounties which is used to cover the cost of running the platform and to fund
 future development.
