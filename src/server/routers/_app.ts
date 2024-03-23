@@ -168,7 +168,7 @@ export const appRouter = router({
         contributions: successfullyChargedContributions,
         amount: {
           total: amount?.total ?? 0,
-          availableTotal: amount?.availableTotal ?? 0,
+          availableTotal: (amount?.availableTotal ?? 0) * 0.95,
         },
       }
     }),
