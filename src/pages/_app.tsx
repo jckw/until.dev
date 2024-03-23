@@ -28,6 +28,25 @@ function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
         />
+        <meta
+          name="og:image"
+          content={`${process.env.NEXT_PUBLIC_URL}/api/og`}
+        />
+        <meta
+          name="description"
+          content="Crowdfund reverse-bounties for open-source issues with Until.dev"
+        />
+        <meta property="og:title" content="Until.dev" />
+        <meta
+          property="og:description"
+          content="Crowdfund reverse-bounties for open-source issues with Until.dev"
+        />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_URL} />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content={`${process.env.NEXT_PUBLIC_URL}/api/og`}
+        />
         <script
           defer
           data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}

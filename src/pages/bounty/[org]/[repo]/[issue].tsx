@@ -60,6 +60,10 @@ export default function Page() {
             : "Create bounty for"}{" "}
           {repo}#{issue} - {process.env.NEXT_PUBLIC_APP_NAME}
         </title>
+        <meta
+          name="og:image"
+          content={`${process.env.NEXT_PUBLIC_URL}/api/og?repo=${repo}&issue=${issue}`}
+        />
       </Head>
 
       <Header activeIssueUrl={issueQuery.data?.issue?.html_url || ""} />
