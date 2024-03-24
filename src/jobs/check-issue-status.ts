@@ -48,7 +48,7 @@ const issueStatusChecker = client.defineJob({
     io.resend.emails.send(
       `bounty-issue-closed-email-${payload.org}-${payload.repo}-${payload.issue}`,
       {
-        from: "until@apps.weekend.systems",
+        from: process.env.EMAIL_FROM!,
         to: "jackweatherilt@outlook.com",
         subject: "Bounty issue closed",
         text: `The issue ${payload.org}/${payload.repo}#${payload.issue} has been closed and the bounty has been paused. Please look into it and update the bounty status accordingly.`,
