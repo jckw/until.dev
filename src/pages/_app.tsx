@@ -25,25 +25,34 @@ function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <meta
+          key="viewport"
           name="viewport"
           content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
         />
         <meta
+          key="og:image"
           name="og:image"
           content={`${process.env.NEXT_PUBLIC_URL}/api/og`}
         />
         <meta
+          key="description"
           name="description"
           content="Crowdfund reverse-bounties for open-source issues with Until.dev"
         />
-        <meta property="og:title" content="Until.dev" />
+        <meta key="og:title" property="og:title" content="Until.dev" />
         <meta
+          key="og:description"
           property="og:description"
           content="Crowdfund reverse-bounties for open-source issues with Until.dev"
         />
-        <meta property="og:url" content={process.env.NEXT_PUBLIC_URL} />
-        <meta property="og:type" content="website" />
         <meta
+          key="og:url"
+          property="og:url"
+          content={process.env.NEXT_PUBLIC_URL}
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
           property="og:image"
           content={`${process.env.NEXT_PUBLIC_URL}/api/og`}
         />

@@ -61,6 +61,7 @@ export default function Page() {
           {repo}#{issue} - {process.env.NEXT_PUBLIC_APP_NAME}
         </title>
         <meta
+          key="og:image"
           name="og:image"
           content={`${process.env.NEXT_PUBLIC_URL}/api/og?repo=${repo}&issue=${issue}`}
         />
