@@ -16,6 +16,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Lower priority
 
+- [ ] Email notifications for bounty status changes
 - [ ] Prevent donations on closed issues
 - [ ] Test batch refunder
 - [ ] Test issue checker

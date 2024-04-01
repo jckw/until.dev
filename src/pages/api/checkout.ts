@@ -5,6 +5,7 @@ import { z } from "zod"
 import { db, schema } from "@/db"
 import { Duration, add } from "date-fns"
 import * as Sentry from "@sentry/node"
+import { logsnag } from "@/lib/logsnag"
 
 const dataSchema = z.object({
   org: z.string(),
@@ -66,6 +67,18 @@ export default async function handler(
 
   const centAmount = parsed.data.amount * 100
   const dbBountyProduct = await getOrCreateBounty(parsed.data)
+
+  await logsnag.track({
+    channel: "contributions",
+    event: "Contribution checkout started",
+    icon: "💰",
+    notify: true,
+    description: `Contribution checkout started for ${parsed.data.amount} USD on ${parsed.data.org}/${parsed.data.repo}#${parsed.data.issue}`,
+    tags: {
+      expires_in: parsed.data.expiresIn,
+      issue: `${parsed.data.org}/${parsed.data.repo}#${parsed.data.issue}`,
+    },
+  })
 
   try {
     const session = await stripe.checkout.sessions.create({

@@ -564,6 +564,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@logsnag/node@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@logsnag/node/-/node-1.0.1.tgz#997bc6f9ea00fa3b527a84a4a29a388385b1255d"
+  integrity sha512-JW2S1KN91XyOb0oG2PblboZ1Ys4mkOSMn83GDYjM8CXzcFbkYFMnlFQoEgP0Y5z+1A56hOO+a7uLsvxO5IdUFA==
+
 "@mdx-js/loader@^3.0.1":
   version "3.0.1"
   resolved "https://registry.npmjs.org/@mdx-js/loader/-/loader-3.0.1.tgz"
