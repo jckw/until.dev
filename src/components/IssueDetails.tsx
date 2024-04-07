@@ -92,7 +92,7 @@ export const IssueDetails = ({
       {meta.bounty?.status === "paused" ? (
         <div className="rounded border border-yellow-500 p-4 text-yellow-900 font-medium">
           <p className="mb-2">
-            This bounty is paused as that the repo owner has closed the issue.
+            This bounty is paused as the repo owner has closed the issue.
             Refunds will therefore not be issued until the{" "}
             {process.env.NEXT_PUBLIC_APP_NAME} team assesses whether the issue
             has been resolved.
