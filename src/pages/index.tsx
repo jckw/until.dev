@@ -67,31 +67,62 @@ export default function Page() {
       <Header hideSearchBar />
       <main className="my-8">
         <div className="flex flex-col gap-3 my-16">
-          <div className="my-8">
-            <h1 className="text-[3rem] leading-[3rem] sm:text-[4rem] sm:leading-[4rem] font-extrabold text-center font-display tracking-tight">
-              Open-source Bounties created by the Community
-            </h1>
-            <h2 className="text-2xl text-center mt-4 text-gray-600">
-              Fund open-source projects you use and prioritize the issues you
-              care about
-            </h2>
-          </div>
-          <div className="flex justify-center items-center">
-            <Input
-              className="max-w-[350px]"
-              variant="lg"
-              placeholder="Enter a GitHub issue URL"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  const { org, repo, id } = parseGithubUrl(
-                    e.currentTarget.value
-                  )
-                  if (org && repo && id) {
-                    router.push(`/bounty/${org}/${repo}/${id}`)
+          <div className="flex flex-col-reverse lg:flex-row gap-16 lg:items-center">
+            <div className="mt-8 mb-2 max-w-[600px]">
+              <h1 className="text-[3rem] leading-[3rem] sm:text-[4rem] sm:leading-[4rem] font-medium font-display tracking-tight">
+                Fund fast fixes in open-source,
+                <br />
+                or your money back.
+              </h1>
+              <h2 className="text-lg  mt-4 text-gray-700 mb-2">
+                <span className="font-medium text-gray-900">
+                  Until is a new way to fund open-source projects.
+                </span>{" "}
+                Contribute to crowdfunded bounties on open-source issues, and
+                set an expiry date for your donation.
+              </h2>
+              <Input
+                className="max-w-[350px]"
+                variant="lg"
+                placeholder="Jump to GitHub issue URL"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const { org, repo, id } = parseGithubUrl(
+                      e.currentTarget.value
+                    )
+                    if (org && repo && id) {
+                      router.push(`/bounty/${org}/${repo}/${id}`)
+                    }
                   }
-                }
-              }}
-            />
+                }}
+              />
+            </div>
+            <div className="flex-1 -mb-64 lg:mb-0">
+              <svg
+                width="100%"
+                viewBox="0 0 784 369"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g opacity="0.3">
+                  <path
+                    d="M158.886 12.8345H9.62598V365.791H934.78V248.739H636.261V203.719H494.721V180.309H450.972V146.094H158.886V12.8345Z"
+                    fill="#FEE4E1"
+                  />
+                  <path
+                    d="M9.62598 12.8345H158.886V144.882H450.972V178.786H494.721V201.984H636.261V246.594H934.781V362.582H1137.48"
+                    stroke="#FD766C"
+                    stroke-width="9.62609"
+                  />
+                  <circle
+                    cx="12.8348"
+                    cy="12.8348"
+                    r="12.8348"
+                    fill="#FD766C"
+                  />
+                </g>
+              </svg>
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-4">
