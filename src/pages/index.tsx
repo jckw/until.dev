@@ -28,7 +28,7 @@ export default function Page() {
         <div className="flex flex-col gap-3 my-16">
           <div className="flex flex-col-reverse lg:flex-row md:gap-16 lg:items-center">
             <div className="mt-8 mb-2 max-w-[600px]">
-              <h1 className="text-[3rem] leading-[3rem] sm:text-[4rem] sm:leading-[4rem] font-medium font-display tracking-tight">
+              <h1 className="text-[3rem] leading-[3rem] sm:text-[4rem] sm:leading-[4rem] font-medium tracking-tight">
                 Fund fast fixes in open-source,
                 <br />
                 or your money back.

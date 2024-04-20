@@ -11,6 +11,7 @@
     "migrate": "dotenv -e .env -- tsx ./src/db/drizzle/migrate.ts"
   },
   "dependencies": {
+    "@hotjar/browser": "^1.0.9",
     "@logsnag/node": "^1.0.1",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",

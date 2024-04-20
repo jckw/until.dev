@@ -2,30 +2,28 @@ import { Footer } from "@/components/Footer"
 import "@/styles/globals.css"
 import { trpc } from "@/utils/trpc"
 import type { AppProps } from "next/app"
-import { Bricolage_Grotesque } from "next/font/google"
 import { useIsomorphicLayoutEffect } from "react-use"
 import { Toaster } from "sonner"
 import NextTopLoader from "nextjs-toploader"
 import Head from "next/head"
+import Hotjar from "@hotjar/browser"
 
 import localFont from "next/font/local"
-import { Header } from "@/components/Header"
 
 const GeistSans = localFont({
   src: "../assets/GeistVF.woff2",
   variable: "--font-sans",
   weight: "100 900",
 })
-const BricolageFont = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-  adjustFontFallback: false,
-})
+
+const siteId = 4952705
+const hotjarVersion = 6
+
+Hotjar.init(siteId, hotjarVersion)
 
 function App({ Component, pageProps }: AppProps) {
   useIsomorphicLayoutEffect(() => {
-    document.body.className = `${GeistSans.className} ${GeistSans.variable} ${BricolageFont.variable}`
+    document.body.className = `${GeistSans.className} ${GeistSans.variable}`
   }, [])
 
   return (
