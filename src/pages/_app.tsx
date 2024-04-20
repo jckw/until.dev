@@ -14,6 +14,7 @@ const GeistSans = localFont({
   src: "../assets/GeistVF.woff2",
   variable: "--font-sans",
   weight: "100 900",
+  display: "swap",
 })
 
 const siteId = 4952705
