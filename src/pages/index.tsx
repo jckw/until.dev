@@ -1,58 +1,16 @@
 import { Input } from "@/ui/input"
-import { Button } from "@/ui/button"
-import { useRef } from "react"
 import { useRouter } from "next/router"
 import { parseGithubUrl } from "@/utils/parseGithubUrl"
 import Head from "next/head"
 import { Header } from "@/components/Header"
 import { trpc } from "@/utils/trpc"
 import Link from "next/link"
-import { BountyChart, Chart } from "@/components/BountyChart"
+import { Chart } from "@/components/BountyChart"
 import { createHelpers } from "@/utils/ssr"
 import { GetServerSidePropsContext } from "next"
-
-const BountyCard = ({
-  org,
-  repo,
-  issue,
-  total,
-  contributors,
-}: {
-  org: string
-  repo: string
-  issue: number
-  total: number
-  contributors: number
-}) => {
-  const chartQuery = trpc.getBountyChart.useQuery({
-    org,
-    repo,
-    issue,
-  })
-
-  return (
-    <div className="bg-white rounded-lg border p-4 flex flex-col gap-2 h-full justify-between">
-      <div>
-        <div className="text-xl font-medium  text-gray-700">
-          {org}/{repo}#{issue}
-        </div>
-
-        <div className="flex items-center gap-4 mb-2">
-          <div className="text-2xl font-bold font-display">
-            ${(total / 100).toFixed(2)}
-          </div>
-          <p className="text-gray-600 text-sm">
-            {contributors} contributor{contributors === 1 ? "" : "s"}
-          </p>
-        </div>
-      </div>
-      <Chart
-        donations={chartQuery.data?.contributions || ([] as any)}
-        height={150}
-      />
-    </div>
-  )
-}
+import { Card } from "@/components/Card"
+import { GitHubLogoIcon } from "@radix-ui/react-icons"
+import { Diamond, Gem } from "lucide-react"
 
 export default function Page() {
   const router = useRouter()
@@ -136,12 +94,11 @@ export default function Page() {
                 href={`/bounty/${bounty.org}/${bounty.repo}/${bounty.issue}`}
                 key={bounty.bountyIssueId}
               >
-                <BountyCard
-                  org={bounty.org}
-                  repo={bounty.repo}
-                  issue={bounty.issue}
-                  total={bounty.total}
-                  contributors={bounty.contributors}
+                <Card
+                  icon={<Gem strokeWidth={1.5} className="stroke-green-600" />}
+                  title={`${bounty.repo}`}
+                  value={`$${(bounty.total / 100).toFixed(2)}`}
+                  caption={`${bounty.org}/${bounty.repo}#${bounty.issue}`}
                 />
               </Link>
             ))}
