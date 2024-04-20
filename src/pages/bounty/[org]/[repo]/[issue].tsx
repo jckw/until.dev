@@ -109,6 +109,9 @@ export default function Page() {
                 icon={<Gem strokeWidth={1.5} className="stroke-green-600" />}
                 title="Current bounty reward"
                 value={`$${(chartQuery.data?.amount.total! / 100).toFixed(2)}`}
+                tooltip={`~$${(
+                  chartQuery.data?.amount.availableTotal! / 100
+                ).toFixed(2)} after fees`}
                 caption={`if solved before ${
                   chartQuery.data?.contributions[0].expiresAt
                     ? format(
@@ -145,6 +148,7 @@ export default function Page() {
                     />
                   }
                   title="Bounty recipient split"
+                  tooltip="Public bounties are coming soon"
                   // TODO: Implement splits
                   // value="80:20"
                   // caption="PR author gets 80% of the reward, maintainer gets 20%"
@@ -155,11 +159,7 @@ export default function Page() {
             </div>
           </div>
 
-          <HowItWorksSection
-            org={org as string}
-            repo={repo as string}
-            issue={Number(issue)}
-          />
+          <HowItWorksSection />
         </main>
       ) : null}
     </>

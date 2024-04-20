@@ -11,6 +11,7 @@ import { GetServerSidePropsContext } from "next"
 import { Card } from "@/components/Card"
 import { GitHubLogoIcon } from "@radix-ui/react-icons"
 import { Diamond, Gem } from "lucide-react"
+import { HowItWorksSection } from "@/components/HowItWorksSection"
 
 export default function Page() {
   const router = useRouter()
@@ -83,8 +84,11 @@ export default function Page() {
             </div>
           </div>
         </div>
+
+        <HowItWorksSection className="my-8" />
+
         <div className="flex flex-col gap-4">
-          <div className="rounded-full bg-gray-50 px-4 py-2 font-medium inline-block self-start">
+          <div className="font-medium inline-block self-start">
             Recently funded
           </div>
 

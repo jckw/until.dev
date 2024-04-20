@@ -64,7 +64,7 @@ const config = {
           "900": "#4d4f5b",
           "950": "#31323a",
         },
-        Stonewall: {
+        stonewall: {
           "50": "#f4f3f2",
           "100": "#e4e1dd",
           "200": "#d4cdd4",
