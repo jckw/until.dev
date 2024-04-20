@@ -22,7 +22,7 @@ export default function Page() {
       <Head>
         <title>{process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
-      <Header hideSearchBar />
+      <Header />
       <main className="my-8 container mx-auto px-6">
         <div className="flex flex-col gap-3 my-16">
           <div className="flex flex-col-reverse lg:flex-row md:gap-16 lg:items-center">

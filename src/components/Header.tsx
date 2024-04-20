@@ -5,14 +5,14 @@ import { useRouter } from "next/router"
 import { parseGithubUrl } from "@/utils/parseGithubUrl"
 import { CornerDownLeft, SquareSlash } from "lucide-react"
 import { useEffect, useRef } from "react"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/ui/tooltip"
 
-export const Header = ({
-  activeIssueUrl,
-  hideSearchBar,
-}: {
-  activeIssueUrl?: string
-  hideSearchBar?: boolean
-}) => {
+export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
   const router = useRouter()
   const ref = useRef<HTMLInputElement>(null)
 
@@ -49,38 +49,47 @@ export const Header = ({
           <Logo />
         </Link>
 
-        <div className="flex items-center justify-center relative">
-          <Input
-            ref={ref}
-            LeftIcon={() => (
-              <SquareSlash
-                size={16}
-                strokeWidth={1.5}
-                className="stroke-gray-400"
-              />
-            )}
-            RightIcon={() => (
-              <CornerDownLeft
-                size={16}
-                strokeWidth={1.5}
-                className="stroke-gray-400"
-              />
-            )}
-            placeholder="Enter a Github Issue URL"
-            spellCheck={false}
-            type="url"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                const { org, repo, id } = parseGithubUrl(e.currentTarget.value)
-                if (org && repo && id) {
-                  router.push(`/bounty/${org}/${repo}/${id}`)
-                }
+        <Input
+          ref={ref}
+          LeftIcon={() => (
+            <SquareSlash
+              size={16}
+              strokeWidth={1.5}
+              className="stroke-gray-400"
+            />
+          )}
+          RightIcon={() => (
+            <CornerDownLeft
+              size={16}
+              strokeWidth={1.5}
+              className="stroke-gray-400"
+            />
+          )}
+          placeholder="Enter a Github Issue URL"
+          spellCheck={false}
+          type="url"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const { org, repo, id } = parseGithubUrl(e.currentTarget.value)
+              if (org && repo && id) {
+                router.push(`/bounty/${org}/${repo}/${id}`)
               }
-            }}
-            className="w-[200px] md:w-[400px]"
-            defaultValue={activeIssueUrl || ""}
-          />
-        </div>
+            }
+          }}
+          className="w-[200px] md:w-[400px]"
+          defaultValue={activeIssueUrl || ""}
+        />
+
+        <nav className="flex items-center gap-6 text-gray-800">
+          <TooltipProvider>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger>Available bounties</TooltipTrigger>
+              <TooltipContent>
+                <p>Coming soon</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </nav>
       </header>
     </div>
   )
