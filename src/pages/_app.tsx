@@ -2,23 +2,29 @@ import { Footer } from "@/components/Footer"
 import "@/styles/globals.css"
 import { trpc } from "@/utils/trpc"
 import type { AppProps } from "next/app"
-import { Inter, Bricolage_Grotesque } from "next/font/google"
+import { Bricolage_Grotesque } from "next/font/google"
 import { useIsomorphicLayoutEffect } from "react-use"
 import { Toaster } from "sonner"
 import NextTopLoader from "nextjs-toploader"
 import Head from "next/head"
 
-const interFont = Inter({ subsets: ["latin"], variable: "--inter" })
-const bricolageFont = Bricolage_Grotesque({
+import localFont from "next/font/local"
+
+const GeistSans = localFont({
+  src: "../assets/GeistVF.woff2",
+  variable: "--font-sans",
+  weight: "100 900",
+})
+const BricolageFont = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--bricolage",
+  variable: "--font-display",
   display: "swap",
   adjustFontFallback: false,
 })
 
 function App({ Component, pageProps }: AppProps) {
   useIsomorphicLayoutEffect(() => {
-    document.body.className = `${interFont.className} ${interFont.variable} ${bricolageFont.variable}`
+    document.body.className = `${GeistSans.className} ${GeistSans.variable} ${BricolageFont.variable}`
   }, [])
 
   return (

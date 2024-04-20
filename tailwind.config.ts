@@ -14,8 +14,8 @@ const config = {
     },
     extend: {
       fontFamily: {
-        display: ["var(--bricolage)", "sans-serif"],
-        sans: ["var(--inter)", "sans-serif"],
+        display: ["var(--font-display)", "sans-serif"],
+        sans: ["var(--font-sans)", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

@@ -67,7 +67,7 @@ export default function Page() {
       <Header hideSearchBar />
       <main className="my-8">
         <div className="flex flex-col gap-3 my-16">
-          <div className="flex flex-col-reverse lg:flex-row gap-16 lg:items-center">
+          <div className="flex flex-col-reverse lg:flex-row md:gap-16 lg:items-center">
             <div className="mt-8 mb-2 max-w-[600px]">
               <h1 className="text-[3rem] leading-[3rem] sm:text-[4rem] sm:leading-[4rem] font-medium font-display tracking-tight">
                 Fund fast fixes in open-source,
@@ -97,7 +97,7 @@ export default function Page() {
                 }}
               />
             </div>
-            <div className="flex-1 -mb-64 lg:mb-0">
+            <div className="flex-1 md:-mb-64 lg:mb-0">
               <svg
                 width="100%"
                 viewBox="0 0 784 369"
