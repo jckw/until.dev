@@ -50,11 +50,13 @@ export default function Page() {
                 </div>
               ) : (
                 <>
-                  <div className="flex gap-4 items-center">
+                  <div className="flex gap-2 sm:gap-4 flex-col justify-stretch sm:flex-row sm:items-center">
                     <Input
                       className="max-w-[350px]"
                       variant="lg"
+                      type="email"
                       placeholder="name@company.com"
+                      autoComplete="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       LeftIcon={() => <MailIcon strokeWidth={1.5} />}
