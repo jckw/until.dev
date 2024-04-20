@@ -113,12 +113,12 @@ export default function Page() {
                   chartQuery.data?.amount.availableTotal! / 100
                 ).toFixed(2)} after fees`}
                 caption={`if solved before ${
-                  chartQuery.data?.contributions[0].expiresAt
+                  chartQuery.data?.contributions[0]?.expiresAt
                     ? format(
                         new Date(chartQuery.data.contributions[0].expiresAt),
                         "MMMM d yyyy"
                       )
-                    : "never"
+                    : "the end of time"
                 }`}
               >
                 <Chart

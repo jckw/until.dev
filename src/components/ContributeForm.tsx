@@ -48,9 +48,13 @@ export const ContributeForm = ({
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex flex-col gap-1">
-        <div className="text-lg font-medium">Make a contribution</div>
+        <div className="text-lg font-medium">
+          {bountyExists ? "Make a contribution" : "Create a bounty"}
+        </div>
         <div className="text-gray-800">
-          Contribute to the reward for this bounty.
+          {bountyExists
+            ? "Contribute to the reward for this bounty"
+            : "Contribute the first donation to the reward for this issue"}
         </div>
       </div>
 
