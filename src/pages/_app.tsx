@@ -9,6 +9,7 @@ import Head from "next/head"
 import Hotjar from "@hotjar/browser"
 
 import localFont from "next/font/local"
+import { useEffect } from "react"
 
 const GeistSans = localFont({
   src: "../assets/GeistVF.woff2",
@@ -20,9 +21,11 @@ const GeistSans = localFont({
 const siteId = 4952705
 const hotjarVersion = 6
 
-Hotjar.init(siteId, hotjarVersion)
-
 function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    Hotjar.init(siteId, hotjarVersion)
+  }, [])
+
   useIsomorphicLayoutEffect(() => {
     document.body.className = `${GeistSans.className} ${GeistSans.variable}`
   }, [])

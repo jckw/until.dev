@@ -71,7 +71,7 @@ export default function Page() {
                   <path
                     d="M9.62598 12.8345H158.886V144.882H450.972V178.786H494.721V201.984H636.261V246.594H934.781V362.582H1137.48"
                     stroke="#FD766C"
-                    stroke-width="9.62609"
+                    strokeWidth="9.62609"
                   />
                   <circle
                     cx="12.8348"
