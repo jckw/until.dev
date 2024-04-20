@@ -19,7 +19,7 @@ export const Footer = () => {
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">
                 Help
               </h2>
-              <ul className="text-gray-500 font-medium">
+              <ul className="text-gray-500">
                 <li className="mb-4">
                   <a
                     target="_blank"
@@ -44,7 +44,7 @@ export const Footer = () => {
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">
                 Community
               </h2>
-              <ul className="text-gray-500 font-medium">
+              <ul className="text-gray-500">
                 <li className="mb-4">
                   <a
                     href="https://github.com/jckw/until.dev"
@@ -67,7 +67,7 @@ export const Footer = () => {
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">
                 Legal
               </h2>
-              <ul className="text-gray-500 font-medium">
+              <ul className="text-gray-500">
                 <li className="mb-4">
                   <Link
                     target="_blank"

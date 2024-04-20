@@ -5,17 +5,52 @@ import { trpc } from "@/utils/trpc"
 import { toast } from "sonner"
 import Head from "next/head"
 import { Header } from "@/components/Header"
-import { BountyDetails } from "@/components/BountyDetails"
-import { BountyChart, Donation } from "@/components/BountyChart"
+import { Chart, Donation } from "@/components/BountyChart"
 import { HowItWorksSection } from "@/components/HowItWorksSection"
 import { ContributeForm } from "@/components/ContributeForm"
 import { ContributionSuccessMessage } from "@/components/ContributionSuccessMessage"
 import { IssueDetails } from "@/components/IssueDetails"
 import { GetServerSidePropsContext } from "next"
 import { createHelpers } from "@/utils/ssr"
+import { BadgePercent, Gem, Users } from "lucide-react"
+import { cn } from "@/utils"
+import { format } from "date-fns"
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+)
+
+const Card = ({
+  icon,
+  title,
+  value,
+  caption,
+  className,
+  children,
+}: {
+  icon: React.ReactNode
+  title: string
+  value: number | string
+  caption: string
+  className?: string
+  children?: React.ReactNode
+}) => (
+  <div
+    className={cn(
+      "border border-gray-200 rounded-sm p-5 flex flex-col gap-3 justify-between",
+      className
+    )}
+  >
+    <div className="flex gap-3 items-center">
+      {icon}
+      <div className="font-medium text-gray-950 whitespace-nowrap">{title}</div>
+    </div>
+    <div>
+      <div className="text-xl">{value}</div>
+      <div className="text-gray-800 text-sm">{caption}</div>
+    </div>
+    {children}
+  </div>
 )
 
 export default function Page() {
@@ -70,37 +105,15 @@ export default function Page() {
       <Header activeIssueUrl={issueQuery.data?.issue?.html_url || ""} />
 
       {issueQuery.data ? (
-        <main
-          className={`mt-8 md:py-8 grid ${
-            issueQuery.data.bounty
-              ? "md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-4"
-              : "grid-cols-1 max-w-3xl md:mx-auto gap-12"
-          }   auto-rows-max md:items-start`}
-        >
+        <main className="flex flex-col gap-6 mt-6">
           <IssueDetails
-            className="md:col-start-1 md:row-start-1"
             org={org as string}
             repo={repo as string}
             meta={issueQuery.data}
           />
 
-          {issueQuery.data.bounty ? (
-            <>
-              <BountyDetails
-                className="md:col-start-2 md:row-start-1 md:self-end"
-                total={chartQuery.data?.amount.total!}
-                available={chartQuery.data?.amount.availableTotal!}
-              />
-              <BountyChart
-                className="md:col-start-2 md:row-start-2 md:row-span-3"
-                contributions={chartQuery.data?.contributions! as Donation[]}
-              />
-            </>
-          ) : null}
-
           {success ? (
             <ContributionSuccessMessage
-              className="row-start-2 md:col-start-1 md:row-start-2 md:my-4"
               bountyTotalStr={`$${(
                 chartQuery.data?.amount.total! / 100
               ).toFixed(2)}`}
@@ -113,20 +126,72 @@ export default function Page() {
             />
           ) : null}
 
-          <div className={`md:col-start-1 md:row-start-${success ? 3 : 2}`}>
+          <div className="flex gap-4 flex-col lg:flex-row">
             <ContributeForm
               org={org as string}
               repo={repo as string}
               issue={Number(issue)}
-              bountyExists={!!issueQuery.data.bounty}
+              bountyExists={!!issueQuery.data?.bounty}
+              meta={issueQuery.data}
+              className="lg:w-2/5"
             />
-
-            <HowItWorksSection
-              org={org as string}
-              repo={repo as string}
-              issue={Number(issue)}
-            />
+            <div className="flex-1 flex gap-4 flex-col md:flex-row">
+              <Card
+                className="flex-1"
+                icon={<Gem strokeWidth={1.5} className="stroke-green-600" />}
+                title="Current bounty reward"
+                value={`$${(chartQuery.data?.amount.total! / 100).toFixed(2)}`}
+                caption={`if solved before ${
+                  chartQuery.data?.contributions[0].expiresAt
+                    ? format(
+                        new Date(chartQuery.data.contributions[0].expiresAt),
+                        "MMMM d yyyy"
+                      )
+                    : "never"
+                }`}
+              >
+                <Chart
+                  donations={chartQuery.data?.contributions! as Donation[]}
+                  height={150}
+                />
+              </Card>
+              <div className="flex gap-4 flex-col sm:flex-row md:flex-col md:max-w-64">
+                <Card
+                  icon={
+                    <Users strokeWidth={1.5} className="stroke-green-600" />
+                  }
+                  title="Total contributors"
+                  value={chartQuery.data?.contributions.length || 0}
+                  caption={
+                    chartQuery.data?.contributions.length === 1
+                      ? "contributor"
+                      : "contributors"
+                  }
+                />
+                <Card
+                  className="flex-1"
+                  icon={
+                    <BadgePercent
+                      strokeWidth={1.5}
+                      className="stroke-green-600"
+                    />
+                  }
+                  title="Bounty recipient split"
+                  // TODO: Implement splits
+                  // value="80:20"
+                  // caption="PR author gets 80% of the reward, maintainer gets 20%"
+                  value="0:100"
+                  caption="This is a maintainer bounty, with 100% of the reward going to the maintainer"
+                />
+              </div>
+            </div>
           </div>
+
+          <HowItWorksSection
+            org={org as string}
+            repo={repo as string}
+            issue={Number(issue)}
+          />
         </main>
       ) : null}
     </div>

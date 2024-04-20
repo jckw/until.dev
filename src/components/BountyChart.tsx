@@ -2,21 +2,23 @@ import { useMemo, useState } from "react"
 import {
   add,
   addDays,
+  addWeeks,
   differenceInCalendarDays,
   format,
-  formatDistanceStrict,
   isAfter,
 } from "date-fns"
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts"
+import { XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
 import { cn } from "@/utils"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectTrigger,
+  SelectValue,
+} from "@/ui/select"
 
 export interface Donation {
   amount: number
@@ -24,29 +26,36 @@ export interface Donation {
 }
 
 interface ChartData {
-  date: Date
+  unit: number
   amount: number
 }
-
 const generateChartData = (
   donations: Donation[],
   startDate: Date,
-  endDate: Date
+  endDate: Date,
+  interval: "days" | "weeks" = "days"
 ): ChartData[] => {
   const baseAmount = donations
     .filter((d) => d.expiresAt === null)
     .reduce((acc, d) => acc + d.amount, 0)
 
-  const daysDifference = differenceInCalendarDays(endDate, startDate) + 1
-  const chartData: ChartData[] = Array.from({ length: daysDifference }).map(
+  const intervalDifference =
+    interval === "days"
+      ? differenceInCalendarDays(endDate, startDate) + 1
+      : Math.ceil(differenceInCalendarDays(endDate, startDate) / 7) + 1
+
+  const chartData: ChartData[] = Array.from({ length: intervalDifference }).map(
     (_, index) => {
-      const currentDate = addDays(startDate, index)
-      const dailyAmount = donations
+      const currentDate =
+        interval === "days"
+          ? addDays(startDate, index)
+          : addDays(startDate, index * 7)
+      const intervalAmount = donations
         .filter((d) => d.expiresAt && isAfter(d.expiresAt, currentDate))
         .reduce((acc, d) => acc + d.amount, 0)
-      const currentAmount = baseAmount + dailyAmount
+      const currentAmount = baseAmount + intervalAmount
 
-      return { date: currentDate, amount: currentAmount }
+      return { unit: index, amount: currentAmount }
     }
   )
 
@@ -58,91 +67,81 @@ interface DonationChartProps {
   height?: number
 }
 
-export const Chart: React.FC<DonationChartProps> = ({
-  donations,
-  height = 200,
-}) => {
-  const [startDate] = useState(new Date())
-  const [endDate] = useState(addDays(startDate, 60))
-  const chartData = useMemo(
-    () => generateChartData(donations, startDate, endDate),
-    [JSON.stringify(donations), startDate, endDate]
-  )
-
+const BarWithBorder = ({ x, y, width, height }: any) => {
   return (
-    <ResponsiveContainer width="100%" height={height}>
-      <AreaChart data={chartData}>
-        <XAxis
-          dataKey="date"
-          style={{ fontFamily: "monospace", fontSize: "12px" }}
-          tickFormatter={(date: Date) => formatDistanceStrict(date, startDate)}
-          axisLine={false}
-          tickMargin={16}
-          tickLine={false}
-          ticks={
-            [{ weeks: 1 }, { weeks: 2 }, { months: 1 }, { months: 2 }].map(
-              (duration) => add(startDate, duration)
-            ) as any
-          }
-        />
-        <YAxis
-          style={{ fontFamily: "monospace", fontSize: "12px" }}
-          tickFormatter={(value, index) => (index > 0 ? `$${value / 100}` : "")}
-          axisLine={false}
-          tickLine={false}
-          minTickGap={10}
-          tickMargin={16}
-        />
-        <CartesianGrid vertical={false} horizontal={false} />
-        <Tooltip
-          labelFormatter={(date: Date) =>
-            `Solved by: ${format(date, "d MMMM yyyy")}`
-          }
-          formatter={(value: number) => [
-            `$${(value / 100).toFixed(2)}`,
-            "Bounty awarded",
-          ]}
-        />
-        <Area
-          type="monotone"
-          dataKey="amount"
-          stroke="#FD766C"
-          fill="#FEE4E1"
-          strokeWidth={3}
-          dot={(props: { index: number; cx: number; cy: number }) => {
-            if (props.index === 0) {
-              return (
-                <circle
-                  r={4}
-                  fill="#FD766C"
-                  // stroke="white"
-                  strokeWidth={2}
-                  cx={props.cx}
-                  cy={props.cy}
-                />
-              )
-            }
-            return <></>
-          }}
-        />
-      </AreaChart>
-    </ResponsiveContainer>
+    <g>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        stroke="none"
+        fill="#E3F5E9"
+      />
+      <rect x={x} y={y} width={width} height={3} stroke="none" fill="#3AAD64" />
+    </g>
   )
 }
 
-export const BountyChart = ({
-  contributions,
-  className,
-}: {
-  contributions: Donation[]
-  className?: string
-}) => {
+export const Chart: React.FC<DonationChartProps> = ({ donations, height }) => {
+  const [startDate] = useState(new Date())
+  const [endDate] = useState(addDays(startDate, 60))
+  const [unit, setUnit] = useState<"days" | "weeks">("days")
+
+  const chartData = useMemo(
+    () => generateChartData(donations, startDate, endDate, unit),
+    [JSON.stringify(donations), startDate, endDate, unit]
+  )
+
   return (
-    <div className={cn("", className)}>
-      <div className="text-lg font-medium mb-2">Payout timeline</div>
-      <div className="ml-[-16px]">
-        <Chart donations={contributions.filter((c) => !!c.amount)} />
-      </div>
+    <div>
+      <Select
+        name="unit"
+        defaultValue={unit}
+        onValueChange={(v) => setUnit(v as "days" | "weeks")}
+      >
+        <SelectTrigger
+          aria-label="View"
+          className="w-auto mx-2 my-2 border-0 p-0 text-gray-700 focus:ring-0 focus:outline-none focus:text-gray-900 m-0"
+        >
+          <SelectValue placeholder="Select view" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectScrollUpButton />
+          <SelectGroup>
+            <SelectItem value="days">Day view</SelectItem>
+            <SelectItem value="weeks">Week view</SelectItem>
+          </SelectGroup>
+          <SelectScrollDownButton />
+        </SelectContent>
+      </Select>
+      <ResponsiveContainer width="100%" height={height}>
+        <BarChart data={chartData.slice(0, 25)} barCategoryGap={2}>
+          <XAxis
+            dataKey="unit"
+            style={{ fontFamily: "monospace", fontSize: 10, color: "#A2AAB8" }}
+            tickLine={false}
+            axisLine={false}
+            interval={0}
+            tickMargin={6}
+          />
+          <Tooltip
+            labelFormatter={(value) =>
+              `Solved within ${value} ${unit}, by ${format(
+                unit === "days"
+                  ? addDays(startDate, value)
+                  : addWeeks(startDate, value),
+                "MMMM d yyyy"
+              )}`
+            }
+            formatter={(value) => [
+              `$${(Number(value) / 100).toFixed(2)}`,
+              "Reward",
+            ]}
+          />
+          <Bar dataKey="amount" shape={BarWithBorder} />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   )
 }
