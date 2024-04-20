@@ -32,20 +32,20 @@ export default function Page() {
           <div className="flex flex-col-reverse lg:flex-row md:gap-16 lg:items-center">
             <div className="mt-8 mb-2 max-w-[600px]">
               <h1 className="text-[3rem] leading-[3rem] sm:text-[4rem] sm:leading-[4rem] font-medium tracking-tight">
-                10x your project’s funding with Until bounties.
+                10x your project&lsquo;s funding with Until bounties.
               </h1>
               <h2 className="text-lg  mt-4 text-gray-700 mb-4">
                 <span className="font-medium text-gray-900">
                   Until is a new way to fund open-source projects.
                 </span>{" "}
                 By allowing anyone to start a crowdfunded bounty on your
-                project’s issues, you can 10x your project’s funding than vs
-                other platforms.
+                project&lsquo;s issues, you can 10x your project&lsquo;s funding
+                than vs other platforms.
               </h2>
               {registerMutation.isSuccess ? (
                 <div className="text-green-700">
-                  Thank you for your interest! Until's maintainer platform is
-                  still under development. We will be in touch soon with an
+                  Thank you for your interest! Until&lsquo;s maintainer platform
+                  is still under development. We will be in touch soon with an
                   update.
                 </div>
               ) : (
@@ -69,7 +69,7 @@ export default function Page() {
                   </div>
 
                   <div className="text-sm text-gray-700 mt-2">
-                    By clicking "Register", you agree to our{" "}
+                    By clicking &quot;Register&quot;, you agree to our{" "}
                     <Link href="/terms">Terms of Service</Link> and{" "}
                     <Link href="/privacy">Privacy Policy</Link>.
                   </div>
