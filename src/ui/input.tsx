@@ -26,8 +26,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "h-9 px-3 py-1 text-sm file:text-sm file:font-medium",
             variant === "lg" &&
               "h-11 px-4 py-2 text-lg file:text-lg file:font-medium",
-            LeftIcon && "pl-9",
-            RightIcon && "pr-9",
+            LeftIcon && variant === "lg" ? "pl-11" : "pl-9",
+            RightIcon && variant === "lg" ? "pr-11" : "pr-9",
             className
           )}
           ref={ref}

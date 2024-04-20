@@ -16,6 +16,7 @@ import {
 import { takeUniqueOrNull, takeUniqueOrThrow } from "@/db/utils"
 import { github } from "@/lib/github"
 import { sub } from "date-fns"
+import { logsnag } from "@/lib/logsnag"
 
 // Filter contributions for those where the payment was successfully charged, or the
 // charge is still unsuccessful and the contribution was created within the last 15
@@ -104,6 +105,22 @@ export const appRouter = router({
         issue: issueRes.data,
         bounty,
       }
+    }),
+
+  registerMaintainerInterest: procedure
+    .input(
+      z.object({
+        email: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      await logsnag.track({
+        channel: "maintainer-beta",
+        event: "Landing page sign up",
+        icon: "👩‍💻",
+        notify: true,
+        description: `User ${opts.input.email} signed up to be notified when Until.dev is available for maintainers.`,
+      })
     }),
 
   getBountyChart: procedure

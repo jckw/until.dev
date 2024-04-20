@@ -91,6 +91,7 @@ export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          <Link href="/maintainers">For maintainers</Link>
         </nav>
       </header>
     </div>
