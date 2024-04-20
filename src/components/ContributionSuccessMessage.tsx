@@ -27,7 +27,9 @@ ${process.env.NEXT_PUBLIC_URL}/bounty/${org}/${repo}/${issue}
 
 The current bounty for completing it is ${bountyTotalStr} if it is closed${withinMsg}.
 
-Others can also contribute to the bounty to increase it.`
+Others can also contribute to the bounty to increase it.
+
+If the repo owner would like to allow contributors to claim the bounty, you can reply to this comment.`
 
   return (
     <div
