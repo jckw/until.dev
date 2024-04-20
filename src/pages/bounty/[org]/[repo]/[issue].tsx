@@ -55,7 +55,7 @@ export default function Page() {
   )
 
   return (
-    <div className="container mx-auto p-6">
+    <>
       <Head>
         <title>
           {issueQuery.data?.bounty
@@ -73,7 +73,7 @@ export default function Page() {
       <Header activeIssueUrl={issueQuery.data?.issue?.html_url || ""} />
 
       {issueQuery.data ? (
-        <main className="flex flex-col gap-6 mt-6">
+        <main className="flex flex-col gap-6 mt-6 container mx-auto px-6">
           <IssueDetails
             org={org as string}
             repo={repo as string}
@@ -162,7 +162,7 @@ export default function Page() {
           />
         </main>
       ) : null}
-    </div>
+    </>
   )
 }
 

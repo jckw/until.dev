@@ -9,6 +9,7 @@ import NextTopLoader from "nextjs-toploader"
 import Head from "next/head"
 
 import localFont from "next/font/local"
+import { Header } from "@/components/Header"
 
 const GeistSans = localFont({
   src: "../assets/GeistVF.woff2",

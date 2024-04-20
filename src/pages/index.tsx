@@ -18,12 +18,12 @@ export default function Page() {
   const bountiesQuery = trpc.getFeaturedBounties.useQuery()
 
   return (
-    <div className="container mx-auto p-6">
+    <>
       <Head>
         <title>{process.env.NEXT_PUBLIC_APP_NAME}</title>
       </Head>
       <Header hideSearchBar />
-      <main className="my-8">
+      <main className="my-8 container mx-auto px-6">
         <div className="flex flex-col gap-3 my-16">
           <div className="flex flex-col-reverse lg:flex-row md:gap-16 lg:items-center">
             <div className="mt-8 mb-2 max-w-[600px]">
@@ -105,7 +105,7 @@ export default function Page() {
           </div>
         </div>
       </main>
-    </div>
+    </>
   )
 }
 

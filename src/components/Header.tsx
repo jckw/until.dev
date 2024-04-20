@@ -34,21 +34,21 @@ export const Header = ({
   }, [])
 
   return (
-    <header className="relative flex flex-col gap-4 min-h-12">
-      <Link
-        href="/"
-        className="flex items-center justify-center md:absolute z-50"
-        style={{
-          height: "100%",
-          top: "0",
-          bottom: "0",
-          left: "0",
-        }}
-      >
-        <Logo />
-      </Link>
+    <div className="border-b border-gray-100 w-full">
+      <header className="relative flex items-center gap-6 container mx-auto h-[80px]">
+        <Link
+          href="/"
+          className="flex items-center justify-center"
+          style={{
+            height: "100%",
+            top: "0",
+            bottom: "0",
+            left: "0",
+          }}
+        >
+          <Logo />
+        </Link>
 
-      {hideSearchBar ? null : (
         <div className="flex items-center justify-center relative">
           <Input
             ref={ref}
@@ -81,7 +81,7 @@ export const Header = ({
             defaultValue={activeIssueUrl || ""}
           />
         </div>
-      )}
-    </header>
+      </header>
+    </div>
   )
 }
