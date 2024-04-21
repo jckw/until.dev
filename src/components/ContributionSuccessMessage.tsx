@@ -13,7 +13,9 @@ const AddCommentCTA = ({
   repo: string
   issue: string | number
 }) => {
-  const message = `I just contributed to the bounty on this issue. Each contribution to this bounty has an expiry time and will be auto-refunded to the contributor if the issue is not solved before then.
+  const message = `I just contributed to [the bounty on this issue](${process.env.NEXT_PUBLIC_URL}/bounty/${org}/${repo}/${issue}).
+
+Each contribution to this bounty has an expiry time and will be auto-refunded to the contributor if the issue is not solved before then.
 
 <a href="${process.env.NEXT_PUBLIC_URL}/bounty/${org}/${repo}/${issue}">
   <img src="${process.env.NEXT_PUBLIC_URL}/api/${org}/${repo}/${issue}/chart.svg" alt="Current bounty reward" alt="Until bounty reward timeline" />
