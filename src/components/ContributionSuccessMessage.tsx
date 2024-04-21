@@ -1,4 +1,3 @@
-import { formatDistanceToNowStrict } from "date-fns"
 import { toast } from "sonner"
 
 import { cn } from "@/utils"
@@ -7,8 +6,6 @@ const AddCommentCTA = ({
   org,
   repo,
   issue,
-  bountyTotalStr,
-  bountyLevelExpiresAt,
 }: {
   bountyTotalStr: string
   bountyLevelExpiresAt?: Date | string | null // ISO date
@@ -16,21 +13,13 @@ const AddCommentCTA = ({
   repo: string
   issue: string | number
 }) => {
-  const withinMsg = bountyLevelExpiresAt
-    ? ` within ${formatDistanceToNowStrict(
-        bountyLevelExpiresAt
-      )}, and decreases after that`
-    : ""
+  const message = `I just contributed to the bounty on this issue. Each contribution to this bounty has an expiry time and will be auto-refunded to the contributor if the issue is not solved before then.
 
-  const message = `I just contributed to the bounty on this issue:
+<a href="${process.env.NEXT_PUBLIC_URL}/bounty/${org}/${repo}/${issue}">
+  <img src="${process.env.NEXT_PUBLIC_URL}/api/${org}/${repo}/${issue}/chart.svg" alt="Current bounty reward" alt="Until bounty reward timeline" />
+</a>
 
-${process.env.NEXT_PUBLIC_URL}/bounty/${org}/${repo}/${issue}
-
-The current bounty for completing it is ${bountyTotalStr} if it is closed${withinMsg}.
-
-Others can also contribute to the bounty to increase it.
-
-If the repo owner would like to allow contributors to claim the bounty, you can reply to this comment.`
+To make this a public bounty or have a reward split, the maintainer can reply to this comment.`
 
   return (
     <div

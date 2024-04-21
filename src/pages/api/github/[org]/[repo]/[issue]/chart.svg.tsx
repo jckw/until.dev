@@ -6,6 +6,7 @@ export const config = {
 }
 
 const WIDTH = 450
+const BAR_HEIGHT = 75
 
 const Col = ({ height, index }: { height?: number; index: number }) => (
   <div
@@ -58,6 +59,7 @@ const Badge = ({
         padding: 24,
         width: WIDTH,
         gap: 16,
+        background: "#ffffff",
       }}
     >
       <div
@@ -100,7 +102,11 @@ const Badge = ({
         </svg>
 
         <div
-          style={{ display: "flex", flexDirection: "column", minHeight: 50 }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: BAR_HEIGHT / 2,
+          }}
         >
           <div
             style={{
@@ -135,7 +141,7 @@ const Badge = ({
       >
         {chart.map((height, index) => (
           <Col
-            height={(height / currentTotal) * 100}
+            height={(height / currentTotal) * BAR_HEIGHT}
             index={index}
             key={index}
           />
@@ -188,56 +194,69 @@ const Badge = ({
 export default async function handler(req: NextRequest) {
   const { pathname } = new URL(req.url!)
   const matches = pathname.match(
-    /^\/api\/(?<org>[^/]+)\/(?<repo>[^/]+)\/(?<issue>[^/]+)\/chart\.svg$/
+    /^\/api\/github\/(?<org>[^/]+)\/(?<repo>[^/]+)\/(?<issue>[^/]+)\/chart\.svg$/
   )
 
   const org = matches?.groups?.org!
   const repo = matches?.groups?.repo!
   const issue = matches?.groups?.issue!
 
-  console.log({ org, repo, issue })
+  try {
+    const [geistMedium, geistRegular, mono] = await Promise.all([
+      fetch(
+        new URL("../../../../../../assets/Geist-Medium.otf", import.meta.url)
+      ).then((res) => res.arrayBuffer()),
+      fetch(
+        new URL("../../../../../../assets/Geist-Regular.otf", import.meta.url)
+      ).then((res) => res.arrayBuffer()),
+      fetch(
+        new URL(
+          "../../../../../../assets/JetBrainsMono-Regular.ttf",
+          import.meta.url
+        )
+      ).then((res) => res.arrayBuffer()),
+    ])
 
-  const [geistMedium, geistRegular, mono] = await Promise.all([
-    fetch(
-      new URL("../../../../../assets/Geist-Medium.otf", import.meta.url)
-    ).then((res) => res.arrayBuffer()),
-    fetch(
-      new URL("../../../../../assets/Geist-Regular.otf", import.meta.url)
-    ).then((res) => res.arrayBuffer()),
-    fetch(
-      new URL(
-        "../../../../../assets/JetBrainsMono-Regular.ttf",
-        import.meta.url
-      )
-    ).then((res) => res.arrayBuffer()),
-  ])
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/${org}/${repo}/${issue}/chart.json`
-  )
-  const { data, currentTotal, changesIn } = (await res.json()) as {
-    data: number[]
-    currentTotal: number
-    changesIn: number
-  }
-
-  const svg = await satori(
-    <Badge chart={data} currentTotal={currentTotal} changesIn={changesIn} />,
-    {
-      width: WIDTH,
-      fonts: [
-        { name: "Geist", data: geistMedium, style: "normal", weight: 500 },
-        { name: "Geist", data: geistRegular, style: "normal", weight: 400 },
-        { name: "JetBrains Mono", data: mono, style: "normal", weight: 400 },
-      ],
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/github/${org}/${repo}/${issue}/chart.json`
+    )
+    const { data, currentTotal, changesIn } = (await res.json()) as {
+      data: number[]
+      currentTotal: number
+      changesIn: number
     }
-  )
 
-  return new Response(svg, {
-    headers: {
-      "Content-Type": "image/svg+xml",
-      "Cache-Control": "no-cache",
-    },
-    status: 200,
-  })
+    const svg = await satori(
+      <Badge chart={data} currentTotal={currentTotal} changesIn={changesIn} />,
+      {
+        width: WIDTH,
+        fonts: [
+          { name: "Geist", data: geistMedium, style: "normal", weight: 500 },
+          { name: "Geist", data: geistRegular, style: "normal", weight: 400 },
+          { name: "JetBrains Mono", data: mono, style: "normal", weight: 400 },
+        ],
+      }
+    )
+
+    return new Response(svg, {
+      headers: {
+        "Content-Type": "image/svg+xml",
+        "Cache-Control": "no-cache",
+      },
+      status: 200,
+    })
+  } catch (e) {
+    console.error(e)
+
+    return new Response(
+      '<svg width="1" height="1" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg"></svg>',
+      {
+        headers: {
+          "Content-Type": "image/svg+xml",
+          "Cache-Control": "no-cache",
+        },
+        status: 400,
+      }
+    )
+  }
 }
