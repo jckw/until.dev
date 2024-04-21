@@ -148,7 +148,7 @@ export default function Page() {
                     />
                   }
                   title="Bounty recipient split"
-                  tooltip="Public bounties are coming soon"
+                  tooltip="Put up a PR to claim"
                   value={
                     issueQuery.data.bounty?.prAuthorShare
                       ? `${issueQuery.data.bounty.prAuthorShare}:${

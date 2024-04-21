@@ -6,12 +6,6 @@ import { useRouter } from "next/router"
 import { Logo } from "./icons/Logo"
 
 import { Input } from "@/ui/input"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/ui/tooltip"
 import { parseGithubUrl } from "@/utils/parseGithubUrl"
 
 export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
@@ -85,14 +79,7 @@ export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
         </div>
 
         <nav className="flex items-center gap-6 text-gray-800">
-          <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger>Available bounties</TooltipTrigger>
-              <TooltipContent>
-                <p>Coming soon</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Link href="/bounties">Available bounties</Link>
           <Link href="/maintainers">For maintainers</Link>
         </nav>
       </header>

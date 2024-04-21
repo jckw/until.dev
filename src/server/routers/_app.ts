@@ -126,6 +126,22 @@ export const appRouter = router({
       })
     }),
 
+  registerBountyHunterInterest: procedure
+    .input(
+      z.object({
+        email: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      await logsnag.track({
+        channel: "bounty-hunter-beta",
+        event: "Landing page sign up",
+        icon: "🎯",
+        notify: true,
+        description: `User ${opts.input.email} signed up to be notified when Until.dev is available for bounty hunters.`,
+      })
+    }),
+
   getBountyChart: procedure
     .input(
       z.object({
