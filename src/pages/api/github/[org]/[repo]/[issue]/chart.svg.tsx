@@ -48,7 +48,7 @@ const Badge = ({
 }: {
   chart: number[]
   currentTotal: number
-  changesIn: number
+  changesIn: number | null
 }) => {
   return (
     <div
@@ -127,7 +127,9 @@ const Badge = ({
               display: "flex",
             }}
           >
-            changes in {changesIn} days
+            {changesIn === null
+              ? "minimum bounty"
+              : `changes in ${changesIn} days`}
           </div>
         </div>
       </div>
@@ -142,7 +144,7 @@ const Badge = ({
       >
         {chart.map((height, index) => (
           <Col
-            height={(height / currentTotal) * BAR_HEIGHT}
+            height={(height / (currentTotal || 1)) * BAR_HEIGHT}
             index={index}
             key={index}
           />
@@ -224,7 +226,7 @@ export default async function handler(req: NextRequest) {
     const { data, currentTotal, changesIn } = (await res.json()) as {
       data: number[]
       currentTotal: number
-      changesIn: number
+      changesIn: number | null
     }
 
     const svg = await satori(

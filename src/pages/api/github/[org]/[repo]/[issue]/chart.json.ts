@@ -1,4 +1,5 @@
-import { and, eq, gt, isNotNull, isNull, or } from "drizzle-orm"
+import { differenceInDays } from "date-fns"
+import { and, asc, eq, gt, isNotNull, isNull, or } from "drizzle-orm"
 import { NextApiRequest, NextApiResponse } from "next"
 
 import { db, schema } from "@/db"
@@ -33,12 +34,15 @@ export default async function handler(
         )
       )
     )
+    .orderBy(asc(schema.contribution.expiresAt))
   const data = contribsToChart(contribs, DAYS)
 
   res.status(200).json({
     days: DAYS,
     data,
     currentTotal: data[0],
-    changesIn: data.findLastIndex((val, idx, arr) => val !== arr[idx - 1]),
+    changesIn: contribs[0]?.expiresAt
+      ? differenceInDays(contribs[0].expiresAt, new Date())
+      : null,
   })
 }
