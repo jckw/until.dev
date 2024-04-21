@@ -149,11 +149,22 @@ export default function Page() {
                   }
                   title="Bounty recipient split"
                   tooltip="Public bounties are coming soon"
-                  // TODO: Implement splits
-                  // value="80:20"
-                  // caption="PR author gets 80% of the reward, maintainer gets 20%"
-                  value="0:100"
-                  caption="This is a maintainer bounty, with 100% of the reward going to the maintainer"
+                  value={
+                    issueQuery.data.bounty?.prAuthorShare
+                      ? `${issueQuery.data.bounty.prAuthorShare}:${
+                          100 - issueQuery.data.bounty.prAuthorShare
+                        }`
+                      : "0:100"
+                  }
+                  caption={
+                    issueQuery.data.bounty?.prAuthorShare
+                      ? `PR author gets ${
+                          issueQuery.data.bounty.prAuthorShare
+                        }% of the reward, maintainer gets ${
+                          100 - issueQuery.data.bounty.prAuthorShare
+                        }%`
+                      : "This is a maintainer bounty, with 100% of the reward going to the maintainer"
+                  }
                 />
               </div>
             </div>

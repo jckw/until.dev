@@ -33,6 +33,8 @@ export const bountyIssue = pgTable(
     bountyStatus: bountyStatusEnum("bounty_status").default("open").notNull(),
     pausedAt: timestamp("paused_at"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
+
+    prAuthorShare: integer("pr_author_share").notNull().default(0),
   },
   (t) => ({
     uniqueOrgRepoIssue: unique().on(t.org, t.repo, t.issue),

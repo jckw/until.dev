@@ -16,9 +16,10 @@ export default async function handler(
     .select({
       amount: schema.contribution.amount,
       expiresAt: schema.contribution.expiresAt,
+      prAuthorShare: schema.bountyIssue.prAuthorShare,
     })
     .from(schema.contribution)
-    .innerJoin(
+    .fullJoin(
       schema.bountyIssue,
       eq(schema.contribution.bountyIssueId, schema.bountyIssue.id)
     )
@@ -44,5 +45,6 @@ export default async function handler(
     changesIn: contribs[0]?.expiresAt
       ? differenceInDays(contribs[0].expiresAt, new Date())
       : null,
+    prAuthorShare: contribs[0]?.prAuthorShare ?? 0,
   })
 }

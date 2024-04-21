@@ -91,6 +91,7 @@ export const appRouter = router({
       const bounty = await db
         .select({
           status: schema.bountyIssue.bountyStatus,
+          prAuthorShare: schema.bountyIssue.prAuthorShare,
           createdAt: schema.bountyIssue.createdAt,
         })
         .from(schema.bountyIssue)

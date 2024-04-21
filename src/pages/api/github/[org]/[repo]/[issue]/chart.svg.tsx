@@ -45,10 +45,12 @@ const Badge = ({
   chart,
   currentTotal,
   changesIn,
+  prAuthorShare,
 }: {
   chart: number[]
   currentTotal: number
   changesIn: number | null
+  prAuthorShare: number
 }) => {
   return (
     <div
@@ -167,7 +169,11 @@ const Badge = ({
           }}
         >
           <div style={{ color: "#7A8096" }}>Bounty value by days from now</div>
-          <div style={{ color: "#4D4F5B" }}>100% maintainer reward</div>
+          <div style={{ color: "#4D4F5B" }}>
+            {prAuthorShare
+              ? `${prAuthorShare}% reward public bounty`
+              : "100% maintainer reward"}
+          </div>
         </div>
         <div
           style={{
@@ -223,14 +229,21 @@ export default async function handler(req: NextRequest) {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/api/github/${org}/${repo}/${issue}/chart.json`
     )
-    const { data, currentTotal, changesIn } = (await res.json()) as {
-      data: number[]
-      currentTotal: number
-      changesIn: number | null
-    }
+    const { data, currentTotal, changesIn, prAuthorShare } =
+      (await res.json()) as {
+        data: number[]
+        currentTotal: number
+        changesIn: number | null
+        prAuthorShare: number
+      }
 
     const svg = await satori(
-      <Badge chart={data} currentTotal={currentTotal} changesIn={changesIn} />,
+      <Badge
+        chart={data}
+        currentTotal={currentTotal}
+        changesIn={changesIn}
+        prAuthorShare={prAuthorShare}
+      />,
       {
         width: WIDTH,
         fonts: [

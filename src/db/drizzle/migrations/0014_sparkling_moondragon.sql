@@ -1,0 +1,1 @@
+ALTER TABLE "bounty_issue" ADD COLUMN "pr_author_share" integer DEFAULT 0 NOT NULL;
