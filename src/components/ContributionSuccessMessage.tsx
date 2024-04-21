@@ -1,6 +1,7 @@
-import { cn } from "@/utils"
 import { formatDistanceToNowStrict } from "date-fns"
 import { toast } from "sonner"
+
+import { cn } from "@/utils"
 
 const AddCommentCTA = ({
   org,
@@ -34,7 +35,7 @@ If the repo owner would like to allow contributors to claim the bounty, you can 
   return (
     <div
       className="mt-2 cursor-pointer w-full"
-      onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+      onClick={() => {
         navigator.clipboard.writeText(message)
         toast.success("Copied to clipboard")
       }}

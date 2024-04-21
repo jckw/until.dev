@@ -1,10 +1,12 @@
-import { db, schema } from "@/db"
-import { github } from "@/lib/github"
-import { client } from "@/trigger"
 import { eventTrigger, intervalTrigger } from "@trigger.dev/sdk"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
+
 import { resend } from "./integrations"
+
+import { db, schema } from "@/db"
+import { github } from "@/lib/github"
+import { client } from "@/trigger"
 
 const issueStatusChecker = client.defineJob({
   id: "issue-status-checker-agent",
@@ -21,7 +23,7 @@ const issueStatusChecker = client.defineJob({
   integrations: {
     resend,
   },
-  run: async (payload, io, ctx) => {
+  run: async (payload, io, _ctx) => {
     const issue = await github.issues.get({
       owner: payload.org,
       repo: payload.repo,
@@ -64,7 +66,7 @@ client.defineJob({
   trigger: intervalTrigger({
     seconds: 60 * 60,
   }),
-  run: async (payload, io, ctx) => {
+  run: async (payload, io, _ctx) => {
     const result = await io.runTask("get-issues", async () => {
       const openIssues = await db
         .select()

@@ -1,7 +1,8 @@
-import { PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js"
-import postgres from "postgres"
-import * as schema from "./schema"
+import { drizzle, PostgresJsDatabase } from "drizzle-orm/postgres-js"
 import pgConnectionString from "pg-connection-string"
+import postgres from "postgres"
+
+import * as schema from "./schema"
 
 const dbUrl: string =
   process.env.NEXT_PHASE === "phase-production-build"
@@ -23,6 +24,7 @@ export const sql = postgres({
 let db: PostgresJsDatabase<typeof schema>
 
 declare global {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   var db: PostgresJsDatabase<typeof schema> | undefined
 }
 

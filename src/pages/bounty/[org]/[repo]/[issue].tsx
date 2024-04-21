@@ -1,23 +1,23 @@
 import { useEffect } from "react"
-import { useRouter } from "next/router"
 import { loadStripe } from "@stripe/stripe-js"
-import { trpc } from "@/utils/trpc"
-import { toast } from "sonner"
+import { format } from "date-fns"
+import { BadgePercent, Gem, Users } from "lucide-react"
+import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
-import { Header } from "@/components/Header"
+import { useRouter } from "next/router"
+import { toast } from "sonner"
+
 import { Chart, Donation } from "@/components/BountyChart"
-import { HowItWorksSection } from "@/components/HowItWorksSection"
+import { Card } from "@/components/Card"
 import { ContributeForm } from "@/components/ContributeForm"
 import { ContributionSuccessMessage } from "@/components/ContributionSuccessMessage"
+import { Header } from "@/components/Header"
+import { HowItWorksSection } from "@/components/HowItWorksSection"
 import { IssueDetails } from "@/components/IssueDetails"
-import { GetServerSidePropsContext } from "next"
 import { createHelpers } from "@/utils/ssr"
-import { BadgePercent, Gem, Users } from "lucide-react"
-import { cn } from "@/utils"
-import { format } from "date-fns"
-import { Card } from "@/components/Card"
+import { trpc } from "@/utils/trpc"
 
-const stripePromise = loadStripe(
+const _stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 )
 

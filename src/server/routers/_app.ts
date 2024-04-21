@@ -1,6 +1,4 @@
-import { z } from "zod"
-import { procedure, router } from "../trpc"
-import { db, schema } from "@/db"
+import { sub } from "date-fns"
 import {
   and,
   count,
@@ -13,9 +11,13 @@ import {
   or,
   sum,
 } from "drizzle-orm"
-import { takeUniqueOrNull, takeUniqueOrThrow } from "@/db/utils"
+import { z } from "zod"
+
+import { procedure, router } from "../trpc"
+
+import { db, schema } from "@/db"
+import { takeUniqueOrNull } from "@/db/utils"
 import { github } from "@/lib/github"
-import { sub } from "date-fns"
 import { logsnag } from "@/lib/logsnag"
 
 // Filter contributions for those where the payment was successfully charged, or the

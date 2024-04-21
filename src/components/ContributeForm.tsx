@@ -1,3 +1,6 @@
+import { useState } from "react"
+import { DollarSign, Hourglass } from "lucide-react"
+
 import { RouterOutput } from "@/server/trpc"
 import { Button } from "@/ui/button"
 import { Input } from "@/ui/input"
@@ -12,8 +15,6 @@ import {
   SelectValue,
 } from "@/ui/select"
 import { cn } from "@/utils"
-import { DollarSign, Hourglass } from "lucide-react"
-import { useState } from "react"
 
 interface ContributeFormProps {
   org: string

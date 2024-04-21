@@ -1,15 +1,16 @@
-import { Footer } from "@/components/Footer"
-import "@/styles/globals.css"
-import { trpc } from "@/utils/trpc"
-import type { AppProps } from "next/app"
-import { useIsomorphicLayoutEffect } from "react-use"
-import { Toaster } from "sonner"
-import NextTopLoader from "nextjs-toploader"
-import Head from "next/head"
-import Hotjar from "@hotjar/browser"
-
-import localFont from "next/font/local"
 import { useEffect } from "react"
+import { useIsomorphicLayoutEffect } from "react-use"
+import Hotjar from "@hotjar/browser"
+import type { AppProps } from "next/app"
+import localFont from "next/font/local"
+import Head from "next/head"
+import NextTopLoader from "nextjs-toploader"
+import { Toaster } from "sonner"
+
+import "@/styles/globals.css"
+
+import { Footer } from "@/components/Footer"
+import { trpc } from "@/utils/trpc"
 
 const GeistSans = localFont({
   src: "../assets/GeistVF.woff2",

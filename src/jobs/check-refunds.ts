@@ -1,14 +1,16 @@
-import { db, schema } from "@/db"
-import { and, eq, isNotNull, lt } from "drizzle-orm"
 import { Duration, sub } from "date-fns"
-import { stripe } from "@/lib/stripe"
+import { and, eq, isNotNull, lt } from "drizzle-orm"
 import chunk from "lodash/chunk"
+
+import { db, schema } from "@/db"
+import { stripe } from "@/lib/stripe"
 
 const GRACE_PERIOD: Duration = { hours: 4 }
 
 import { eventTrigger, intervalTrigger } from "@trigger.dev/sdk"
-import { client } from "@/trigger"
 import { z } from "zod"
+
+import { client } from "@/trigger"
 
 const batchRefunder = client.defineJob({
   id: "batch-refunder-agent",
@@ -25,7 +27,7 @@ const batchRefunder = client.defineJob({
       ),
     }),
   }),
-  run: async (payload, io, ctx) => {
+  run: async (payload, io, _ctx) => {
     for (const payment of payload.paymentsToRefund) {
       await io.runTask(
         `refund-payment-${payment.paymentIntentId}`,
@@ -47,7 +49,7 @@ client.defineJob({
   trigger: intervalTrigger({
     seconds: 60 * 60,
   }),
-  run: async (payload, io, ctx) => {
+  run: async (payload, io, _ctx) => {
     const result = await io.runTask("get-issues", async () => {
       const paymentsToRefund = await db
         .select({

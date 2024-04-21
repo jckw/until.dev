@@ -1,17 +1,16 @@
-import { Input } from "@/ui/input"
-import { useRouter } from "next/router"
-import { parseGithubUrl } from "@/utils/parseGithubUrl"
-import Head from "next/head"
-import { Header } from "@/components/Header"
-import { trpc } from "@/utils/trpc"
-import Link from "next/link"
-import { Chart } from "@/components/BountyChart"
-import { createHelpers } from "@/utils/ssr"
+import { Gem } from "lucide-react"
 import { GetServerSidePropsContext } from "next"
+import Head from "next/head"
+import Link from "next/link"
+import { useRouter } from "next/router"
+
 import { Card } from "@/components/Card"
-import { GitHubLogoIcon } from "@radix-ui/react-icons"
-import { Diamond, Gem } from "lucide-react"
+import { Header } from "@/components/Header"
 import { HowItWorksSection } from "@/components/HowItWorksSection"
+import { Input } from "@/ui/input"
+import { parseGithubUrl } from "@/utils/parseGithubUrl"
+import { createHelpers } from "@/utils/ssr"
+import { trpc } from "@/utils/trpc"
 
 export default function Page() {
   const router = useRouter()

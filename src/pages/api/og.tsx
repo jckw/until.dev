@@ -1,6 +1,7 @@
-import { Logo } from "@/components/icons/Logo"
 import { ImageResponse } from "@vercel/og"
 import { NextRequest } from "next/server"
+
+import { Logo } from "@/components/icons/Logo"
 
 export const config = {
   runtime: "edge",

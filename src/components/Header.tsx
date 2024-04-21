@@ -1,16 +1,18 @@
-import Link from "next/link"
-import { Logo } from "./icons/Logo"
-import { Input } from "@/ui/input"
-import { useRouter } from "next/router"
-import { parseGithubUrl } from "@/utils/parseGithubUrl"
-import { CornerDownLeft, SquareSlash } from "lucide-react"
 import { useEffect, useRef } from "react"
+import { CornerDownLeft, SquareSlash } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+
+import { Logo } from "./icons/Logo"
+
+import { Input } from "@/ui/input"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/ui/tooltip"
+import { parseGithubUrl } from "@/utils/parseGithubUrl"
 
 export const Header = ({ activeIssueUrl }: { activeIssueUrl?: string }) => {
   const router = useRouter()

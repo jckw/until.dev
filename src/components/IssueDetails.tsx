@@ -1,8 +1,8 @@
-import { RouterOutput } from "@/server/trpc"
-import { formatDistanceToNowStrict } from "date-fns"
 import { Github } from "./icons/Github"
-import { cn } from "@/utils"
 import { Tags } from "./Tag"
+
+import { RouterOutput } from "@/server/trpc"
+import { cn } from "@/utils"
 
 interface IssueDetailsProps {
   org: string
@@ -55,20 +55,3 @@ const GitHubLink = ({
     </a>
   )
 }
-
-const CreatedInfo = ({ meta }: { meta: RouterOutput["getIssueMeta"] }) => (
-  <div className="text-gray-500 font-sm flex gap-4">
-    <span>
-      issue {formatDistanceToNowStrict(new Date(meta.issue?.created_at!))} old
-    </span>
-    {meta.bounty ? (
-      <>
-        <span>/</span>
-        <span>
-          bounty {formatDistanceToNowStrict(new Date(meta.bounty?.createdAt!))}{" "}
-          old
-        </span>
-      </>
-    ) : null}
-  </div>
-)

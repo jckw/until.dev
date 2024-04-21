@@ -1,4 +1,5 @@
 import { eventTrigger } from "@trigger.dev/sdk"
+
 import { client } from "@/trigger"
 
 client.defineJob({
@@ -8,7 +9,7 @@ client.defineJob({
   trigger: eventTrigger({
     name: "example.event",
   }),
-  run: async (payload, io, ctx) => {
+  run: async (payload, io, _ctx) => {
     // Use a Task to generate a random number. Using a Tasks means it only runs once.
     const result = await io.runTask("generate-random-number", async () => {
       return {

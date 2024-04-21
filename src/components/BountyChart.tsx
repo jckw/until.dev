@@ -1,14 +1,13 @@
 import { useMemo, useState } from "react"
 import {
-  add,
   addDays,
   addWeeks,
   differenceInCalendarDays,
   format,
   isAfter,
 } from "date-fns"
-import { XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
-import { cn } from "@/utils"
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts"
+
 import {
   Select,
   SelectContent,
@@ -90,6 +89,7 @@ export const Chart: React.FC<DonationChartProps> = ({ donations, height }) => {
 
   const chartData = useMemo(
     () => generateChartData(donations, startDate, endDate, unit),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(donations), startDate, endDate, unit]
   )
 

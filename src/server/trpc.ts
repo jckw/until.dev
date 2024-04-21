@@ -1,6 +1,7 @@
 import { inferRouterOutputs, initTRPC } from "@trpc/server"
-import { AppRouter } from "./routers/_app"
 import SuperJSON from "superjson"
+
+import { AppRouter } from "./routers/_app"
 
 const t = initTRPC.create({
   transformer: SuperJSON,

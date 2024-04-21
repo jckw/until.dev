@@ -1,7 +1,8 @@
+import { and, eq } from "drizzle-orm"
+
 import { db, schema } from "@/db"
 import { takeUniqueOrNull, takeUniqueOrThrow } from "@/db/utils"
 import { stripe } from "@/lib/stripe"
-import { and, eq } from "drizzle-orm"
 
 type BountyData = {
   org: string
