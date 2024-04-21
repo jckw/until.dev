@@ -11,7 +11,7 @@ export default async function handler(
 ) {
   const { org, repo, issue } = req.query
 
-  const DAYS = 18
+  const DAYS = 24
   const contribs = await db
     .select({
       amount: schema.contribution.amount,
