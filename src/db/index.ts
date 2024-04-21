@@ -23,19 +23,14 @@ export const sql = postgres({
 
 let db: PostgresJsDatabase<typeof schema>
 
-declare global {
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  var db: PostgresJsDatabase<typeof schema> | undefined
-}
-
 if (process.env.NODE_ENV === "production") {
   db = drizzle(sql, { schema })
 } else {
-  if (!global.db) {
-    global.db = drizzle(sql, { schema })
+  if (!(globalThis as any).db) {
+    ;(globalThis as any).db = drizzle(sql, { schema })
   }
 
-  db = global.db
+  db = (globalThis as any).db
 }
 
 export { schema, db }
