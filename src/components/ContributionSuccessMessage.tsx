@@ -18,7 +18,7 @@ const AddCommentCTA = ({
 Each contribution to this bounty has an expiry time and will be auto-refunded to the contributor if the issue is not solved before then.
 
 <a href="${process.env.NEXT_PUBLIC_URL}/bounty/${org}/${repo}/${issue}">
-  <img src="${process.env.NEXT_PUBLIC_URL}/api/${org}/${repo}/${issue}/chart.svg" alt="Current bounty reward" alt="Until bounty reward timeline" />
+  <img src="${process.env.NEXT_PUBLIC_URL}/api/github/${org}/${repo}/${issue}/chart.svg" alt="Current bounty reward" alt="Until bounty reward timeline" />
 </a>
 
 To make this a public bounty or have a reward split, the maintainer can reply to this comment.`

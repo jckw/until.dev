@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs"
 import { NextRequest } from "next/server"
 import satori from "satori"
 
@@ -247,6 +248,7 @@ export default async function handler(req: NextRequest) {
     })
   } catch (e) {
     console.error(e)
+    Sentry.captureException(e)
 
     return new Response(
       '<svg width="1" height="1" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg"></svg>',

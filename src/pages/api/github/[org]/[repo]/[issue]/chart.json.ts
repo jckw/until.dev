@@ -1,5 +1,4 @@
-import { addDays } from "date-fns"
-import { and, eq, isNotNull, isNull, lt, or } from "drizzle-orm"
+import { and, eq, gt, isNotNull, isNull, or } from "drizzle-orm"
 import { NextApiRequest, NextApiResponse } from "next"
 
 import { db, schema } from "@/db"
@@ -29,8 +28,8 @@ export default async function handler(
         eq(schema.bountyIssue.repo, repo as string),
         eq(schema.bountyIssue.issue, parseInt(issue as string)),
         or(
-          lt(schema.contribution.expiresAt, addDays(new Date(), DAYS)),
-          isNull(schema.contribution.expiresAt)
+          isNull(schema.contribution.expiresAt),
+          gt(schema.contribution.expiresAt, new Date())
         )
       )
     )
