@@ -40,20 +40,15 @@ function App({ Component, pageProps }: AppProps) {
           content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
         />
         <meta
-          key="og:image"
-          name="og:image"
-          content={`${process.env.NEXT_PUBLIC_URL}/api/og`}
-        />
-        <meta
           key="description"
           name="description"
-          content="Crowdfund reverse-bounties for open-source issues with Until.dev"
+          content="Until is a new way to fund open-source projects. Contribute to crowdfunded bounties on open-source issues, and set an expiry date for your donation."
         />
         <meta key="og:title" property="og:title" content="Until.dev" />
         <meta
           key="og:description"
           property="og:description"
-          content="Crowdfund reverse-bounties for open-source issues with Until.dev"
+          content="Until is a new way to fund open-source projects. Contribute to crowdfunded bounties on open-source issues, and set an expiry date for your donation."
         />
         <meta
           key="og:url"
@@ -64,8 +59,22 @@ function App({ Component, pageProps }: AppProps) {
         <meta
           key="og:image"
           property="og:image"
-          content={`${process.env.NEXT_PUBLIC_URL}/api/og`}
+          content={`${process.env.NEXT_PUBLIC_URL}/og.png`}
         />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Until bounties: Fund fast fixes in open-source, or your money back."
+        />
+        <meta
+          name="twitter:description"
+          content="Until is a new way to fund open-source projects. Contribute to crowdfunded bounties on open-source issues, and set an expiry date for your donation."
+        />
+        <meta
+          name="twitter:image"
+          content={`${process.env.NEXT_PUBLIC_URL}/og.png`}
+        />
+
         <script
           defer
           data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
