@@ -208,6 +208,35 @@ export const appRouter = router({
         },
       }
     }),
+
+  getPublicBounties: procedure.query(async () => {
+    const bounties = await db
+      .select({
+        id: schema.bountyIssue.id,
+        org: schema.bountyIssue.org,
+        repo: schema.bountyIssue.repo,
+        issue: schema.bountyIssue.issue,
+        prAuthorShare: schema.bountyIssue.prAuthorShare,
+        createdAt: schema.bountyIssue.createdAt,
+        total: sum(schema.contribution.amount).mapWith(Number),
+        availableTotal: sum(schema.contribution.netAmount).mapWith(Number),
+      })
+      .from(schema.bountyIssue)
+      .innerJoin(
+        schema.contribution,
+        eq(schema.bountyIssue.id, schema.contribution.bountyIssueId)
+      )
+      .where(
+        and(
+          gt(schema.bountyIssue.prAuthorShare, 0),
+          contributionIsProbablyAvailable
+        )
+      )
+      .groupBy(schema.bountyIssue.id)
+      .orderBy(desc(schema.bountyIssue.createdAt))
+
+    return bounties
+  }),
 })
 
 export type AppRouter = typeof appRouter
