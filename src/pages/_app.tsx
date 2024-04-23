@@ -59,7 +59,7 @@ function App({ Component, pageProps }: AppProps) {
         <meta
           key="og:image"
           property="og:image"
-          content={`${process.env.NEXT_PUBLIC_URL}/og.png`}
+          content={`${process.env.NEXT_PUBLIC_URL}/og.png?v=1`}
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -72,7 +72,7 @@ function App({ Component, pageProps }: AppProps) {
         />
         <meta
           name="twitter:image"
-          content={`${process.env.NEXT_PUBLIC_URL}/og.png`}
+          content={`${process.env.NEXT_PUBLIC_URL}/og.png?v=1`}
         />
 
         <script
